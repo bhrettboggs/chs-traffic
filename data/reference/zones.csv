@@ -2,6 +2,9 @@
 # OSM name matches snap_road (a regex; blank = any road). Gateway lat/lon were read off the OSM graph
 # built on 2026-11-09 (freeway stubs and road ends at the study-box edge). Destination lat/lon are
 # APPROXIMATE (hand-placed). attraction weights are PLACEHOLDERS: replace with LODES job counts.
+# Removed 2026-11-09: a 'lockwood' gateway that used station 403 (11,000). Route S-1015 is Broad St (see station 442),
+# so 403 is Broad St inside the grid, and Lockwood traffic already arrives via the Ashley bridges / crosstown gateway.
+# Check: mt_pleasant_st (station 718) is on Mount Pleasant St east of King St Ext and may double-count I-26 exits.
 # aadt = SCDOT 2025, both directions, 24 h (data/raw/scdot_aadt_2025_peninsula.csv); spot-check vs the PDF.
 zone_id,kind,name,lat,lon,snap_road,aadt,aadt_station,attraction,notes
 i26,gateway_in,I-26 eastbound into the peninsula,32.81932,-79.95500,,79700,2209,,motorway source stub (no name in OSM)
@@ -11,7 +14,6 @@ meeting_n,gateway_in,US 52 Meeting St from the north,32.82547,-79.95187,^Meeting
 morrison,gateway_in,US 52 Spur Morrison Dr,32.81236,-79.95041,^Morrison Drive$,19700,171,,north end of Morrison in the box
 mt_pleasant_st,gateway_in,Mount Pleasant St (S-49),32.81244,-79.95103,^Mount Pleasant Street$,16600,718,,snaps within ~60 m of Morrison
 king_ext,gateway_in,US 78 King St Ext,32.82380,-79.95262,^King Street$,10200,180,,OSM names it King Street
-lockwood,gateway_in,Lockwood Dr (S-1015),32.79008,-79.96029,^Lockwood Drive$,11000,403,,north end of Lockwood
 i26_out,gateway_out,I-26 westbound out,32.81880,-79.95491,,,,,motorway sink stub
 ravenel_out,gateway_out,Ravenel Bridge eastbound out,32.80495,-79.93330,,,,,motorway sink stub
 crosstown_out,gateway_out,US 17 westbound out,32.78119,-79.96717,,,,,sink stub (Saint Andrews Blvd / trunk link)

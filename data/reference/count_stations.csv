@@ -1,0 +1,32 @@
+# SCDOT 2025 interior count stations mapped to the OSM graph, for calibration (HANDOFF step D).
+# road / from_street / to_street are OSM names (regex, case-insensitive). The script finds the stretch of
+# `road` between its intersections with from_street and to_street and uses the middle segment.
+# SCDOT gives only the route and limits, not the counter's exact spot, so the middle is a guess.
+# Route-code readings: S-46 Rutledge, S-404 Calhoun, S-553 Coming, S-106 St. Philip, S-104/L-200 King,
+# S-107 Meeting, S-1015 Broad (station 442 label), S-393 Beaufain (station 407 runs Lockwood->King),
+# S-103 Ashley Ave (inferred from its limits Murray->Broad->Beaufain->Calhoun->US17; ~70% sure), S-99 Huger, S-3 Spring, S-1037 Cannon.
+# split = "calibrate" or "test" (alternating within each street: calibrate on half, test on the other half).
+station,road,from_street,to_street,mapping_confidence,split
+414,^Calhoun Street$,^Barre Street$,^Rutledge Avenue$,high,calibrate
+415,^Calhoun Street$,^Rutledge Avenue$,^East Bay Street$,medium,test
+439,^Meeting Street$,^Line Street$,^South Battery,low,calibrate
+423,^Rutledge Avenue$,^Mount Pleasant Street$,^Race Street$,high,calibrate
+458,^Rutledge Avenue$,^Race Street$,Septima,high,test
+425,^Rutledge Avenue$,Septima,^Calhoun Street$,medium,calibrate
+426,^Rutledge Avenue$,^Calhoun Street$,^Murray Boulevard$,medium,test
+431,^Coming Street$,^Beaufain Street$,^Spring Street$,low,calibrate
+432,^Coming Street$,^Spring Street$,^Race Street$,medium,test
+433,^St\. Philip Street$,^Calhoun Street$,^Beaufain Street$,high,calibrate
+438,^St\. Philip Street$,^Cannon Street$,^Calhoun Street$,high,test
+434,^St\. Philip Street$,^Line Street$,^Spring Street$,high,calibrate
+436,^King Street$,^Calhoun Street$,^Murray Boulevard$,medium,test
+437,^King Street$,^Line Street$,^John Street$,medium,calibrate
+403,^Broad Street$,^Lockwood Drive$,^East Bay Street$,medium,test
+407,^Beaufain Street$,^Lockwood Drive$,^King Street$,medium,calibrate
+429,^Ashley Avenue$,^Calhoun Street$,Septima,low,test
+454,^Ashley Avenue$,^Beaufain Street$,^Calhoun Street$,low,calibrate
+421,^Huger Street$,^President Street$,^Meeting Street$,high,test
+422,^Huger Street$,^Meeting Street$,^Morrison Drive$,high,calibrate
+419,^Spring Street$,^Meeting Street$,^Cannon Street$,low,test
+417,^Cannon Street$,Septima,^Coming Street$,medium,calibrate
+718,^Mount Pleasant Street$,^King Street$,^Meeting Street$,medium,test

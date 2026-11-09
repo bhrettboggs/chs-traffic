@@ -34,6 +34,7 @@ class Zones:
     sinks: dict         # name -> node   (gateway_out rows, for through traffic)
     dests: dict         # name -> (node, attraction weight)
     snap_report: list   # rows describing each snap, for printing
+    outbound: dict = None   # gateway name -> (exit node, outbound vph); None = inbound-only model
 
 
 def _road_nodes(D, road):
@@ -61,7 +62,7 @@ def _nearest(D, nodes, lat, lon, need_out=False, need_in=False):
 def load_zones(D: nx.DiGraph, path: Path | str) -> Zones:
     """Snap each row of zones.csv to the nearest graph node on a road matching ``snap_road``."""
     df = pd.read_csv(path, comment="#")
-    gw, sinks, dests, rep = {}, {}, {}, []
+    gw, sinks, dests, rep, outbound = {}, {}, {}, [], {}
     for r in df.itertuples():
         cand = _road_nodes(D, r.snap_road)
         node, dist = _nearest(D, cand, r.lat, r.lon,
@@ -72,11 +73,19 @@ def load_zones(D: nx.DiGraph, path: Path | str) -> Zones:
         rep.append(dict(zone=r.zone_id, kind=r.kind, road=r.snap_road, node=node, snap_m=round(dist)))
         if r.kind == "gateway_in":
             gw[r.zone_id] = (node, gateway_vph(float(r.aadt)))
+            out_name = f"{r.zone_id}_out"
+            if out_name in set(df.zone_id):          # freeway: separate sink row
+                exit_node = None
+            else:                                    # arterial: leave where it enters
+                exit_node, _ = _nearest(D, cand, r.lat, r.lon, need_in=True)
+            outbound[r.zone_id] = (exit_node, out_name, gateway_vph(float(r.aadt), split=1 - config.AM_INBOUND_SPLIT))
         elif r.kind == "gateway_out":
             sinks[r.zone_id] = node
         else:
             dests[r.zone_id] = (node, float(r.attraction))
-    return Zones(gw, sinks, dests, rep)
+    out = {g: ((node if node is not None else sinks[name]), q) for g, (node, name, q) in outbound.items()
+           if node is not None or name in sinks}
+    return Zones(gw, sinks, dests, rep, out if config.INCLUDE_OUTBOUND else None)
 
 
 def ff_minutes(D, origins, dests) -> dict:
@@ -129,7 +138,38 @@ def build_od(D, zones: Zones, gateway_scale: dict | None = None, attraction_scal
     cost_min = cost_min or ff_minutes(D, list(grid_prod), list(dest_w))
     for k, q in gravity_od(grid_prod, dest_w, cost_min, beta).items():
         od[k] = od.get(k, 0.0) + q
+    if zones.outbound:
+        _add_outbound(D, zones, od, gateway_scale, dest_w, beta, through_share)
     return od
+
+
+def _add_outbound(D, zones, od, gateway_scale, dest_w, beta, through_share):
+    """AM outbound: each gateway's (1 - inbound split) share of the peak hour leaves
+    through that gateway. Through traffic mirrors THROUGH_SHARE (a -> b inbound
+    becomes b -> a outbound); the rest comes from the destination zones by
+    gravity, attraction-weighted."""
+    in_node = {g: n for g, (n, _) in zones.gateways.items()}
+    exit_prod: dict = {}
+    for g, (exit_node, vph) in zones.outbound.items():
+        vph = vph * gateway_scale.get(g, 1.0)
+        thru = 0.0
+        for src, shares in through_share.items():
+            share = shares.get(f"{g}_out", 0.0)
+            if share and src in in_node:
+                key = (in_node[src], exit_node)   # mirrored: other gateway -> this exit
+                q = vph * share
+                od[key] = od.get(key, 0.0) + q
+                thru += q
+        exit_prod[exit_node] = exit_prod.get(exit_node, 0.0) + vph - thru
+    dests = list(dest_w)
+    cost = {}
+    for d in dests:
+        dist = nx.single_source_dijkstra_path_length(D, d, weight="fftt_s")
+        for x in exit_prod:
+            cost[(x, d)] = dist.get(x, math.inf) / 60.0
+    # gravity from the exit's point of view: which zones do its trips start from
+    for (x, d), q in gravity_od(exit_prod, dest_w, cost, beta).items():
+        od[(d, x)] = od.get((d, x), 0.0) + q
 
 
 def scenarios(D, zones: Zones, n: int = config.N_SCENARIOS, seed: int = config.SCENARIO_SEED) -> list[dict]:

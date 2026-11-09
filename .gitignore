@@ -13,3 +13,4 @@ outputs/*
 # OSM downloads are reproducible from scripts/01_fetch_osm.py; uncomment to stop committing them
 # data/raw/*.graphml
 # data/raw/*.osm
+HANDOFF.md

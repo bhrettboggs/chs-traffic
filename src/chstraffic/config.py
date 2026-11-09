@@ -111,6 +111,10 @@ THROUGH_SHARE = {
     "crosstown": {"i26_out": 0.25, "ravenel_out": 0.10},
 }
 
+# Load AM OUTBOUND trips too (gateway volume x (1 - AM_INBOUND_SPLIT)). The counts used
+# for calibration are two-way, so an inbound-only model can't match them.
+INCLUDE_OUTBOUND = True
+
 # Gravity model deterrence f(c) = exp(-beta * c), c = free-flow minutes.
 GRAVITY_BETA = 0.10
 
