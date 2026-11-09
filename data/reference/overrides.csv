@@ -1,0 +1,7 @@
+# Lane-count and freeze overrides applied after loading OSM (feasibility.segment_table).
+# Match by osmid (one OSM way) or, if osmid is blank, by exact street name (every segment of it).
+# total_lanes = lanes across both directions on that pavement. frozen = yes to never re-orient.
+# Only add a row after checking aerial imagery; put what you checked in source/note.
+# Known gaps (HANDOFF 9, step A): one-way pieces of Coming (~281 m), Rutledge (~175 m) and
+# St. Philip (~390 m) have no lanes tag and default to 1 lane, which blocks two-way.
+name,osmid,total_lanes,frozen,source,note

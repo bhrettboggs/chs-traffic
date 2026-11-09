@@ -1,0 +1,92 @@
+"""The city's question: what if Coming St, Rutledge Ave and Ashley Ave go two-way?
+
+    python scripts/03_city_scenario.py [--scenarios 20]
+
+Converts the one-way segments of each street to two-way where the pavement
+allows it (>= 2 total lanes), alone and all three together, and reports the
+change in total system travel time across demand scenarios: median and
+10th-90th percentile, never a single number. Lists segments that CAN'T go
+two-way because their lane count is 1 (often a missing OSM lanes tag; fix in
+data/reference/overrides.csv after checking imagery).
+
+UNCALIBRATED until HANDOFF step D. Do not quote these numbers yet.
+"""
+
+import argparse
+import pickle
+import sys
+from pathlib import Path
+
+import pandas as pd
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "src"))
+from chstraffic import config, demand, feasibility, robust  # noqa: E402
+
+STREETS = ["Coming Street", "Rutledge Avenue", "Ashley Avenue"]
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--scenarios", type=int, default=config.N_SCENARIOS)
+    ap.add_argument("--graph", type=Path, default=ROOT / "data" / "processed" / "chs_digraph.gpickle")
+    args = ap.parse_args()
+
+    D = pickle.loads(args.graph.read_bytes())
+    table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"))
+    base_cfg = feasibility.baseline_config(table)
+    B = feasibility.apply_config(D, table, base_cfg)
+    zones = demand.load_zones(B, ROOT / "data" / "reference" / "zones.csv")
+
+    print("Zone snaps (check these):")
+    for r in zones.snap_report:
+        print(f"  {r['zone']:<15} {r['kind']:<12} node {r['node']:<12} {r['snap_m']:>4} m  road={r['road']}")
+
+    ods = demand.scenarios(B, zones, n=args.scenarios)
+    pairs = sorted({k for od in ods for k in od}, key=str)
+    print(f"\n{len(ods)} demand scenarios, {len(pairs)} O-D pairs, "
+          f"{sum(ods[0].values()):,.0f} vph in scenario 0")
+    base_ev = robust.evaluate(B, ods)
+    print(f"baseline TSTT median {pd.Series(base_ev.tstt_h).median():,.1f} veh-h "
+          f"(max gap {base_ev.max_gap:.1e}, unreachable {base_ev.unreachable.max():.0f} vph)")
+
+    rows, blocked_rows = [], []
+    variants = {s: [s] for s in STREETS}
+    variants["all three"] = STREETS
+    for label, streets in variants.items():
+        cfg, n_conv = dict(base_cfg), 0
+        for sid, s in table.items():
+            if s.name in streets and s.state != "two":
+                if "two" in s.allowed:
+                    cfg[sid], n_conv = "two", n_conv + 1
+                elif label != "all three":
+                    blocked_rows.append(dict(street=s.name, a=s.a, b=s.b,
+                                             length_m=round(s.template["length_m"]), total_lanes=s.total_lanes,
+                                             lanes_source=s.lanes_source, reason=s.frozen_reason or "1 lane"))
+        N = feasibility.apply_config(D, table, cfg)
+        scr = feasibility.screen(B, N, pairs)
+        if not scr.ok:
+            rows.append(dict(variant=label, converted=n_conv, screen=scr.reason))
+            continue
+        sc = robust.score_config(base_ev, robust.evaluate(N, ods))
+        rows.append(dict(variant=label, converted=n_conv, screen=f"ok ({scr.detour_ratio:.3f}x)",
+                         median=f"{sc.median:+.2%}", p10=f"{sc.p10:+.2%}", p90=f"{sc.p90:+.2%}",
+                         worse_in=f"{1 - sc.win_rate:.0%}"))
+
+    res = pd.DataFrame(rows)
+    blk = pd.DataFrame(blocked_rows)
+    print("\nChange in total system travel time vs today (negative = faster):")
+    print(res.to_string(index=False))
+    if len(blk):
+        print("\nOne-way segments that CAN'T go two-way on today's pavement data:")
+        print(blk.groupby(["street", "reason", "lanes_source"])["length_m"].agg(["count", "sum"]).to_string())
+    out = ROOT / "outputs"
+    out.mkdir(exist_ok=True)
+    res.to_csv(out / "city_scenario.csv", index=False)
+    blk.to_csv(out / "city_scenario_blocked.csv", index=False)
+    print(f"\nwrote {out / 'city_scenario.csv'} and city_scenario_blocked.csv")
+    print("UNCALIBRATED (HANDOFF step D not done). Don't quote these numbers yet.")
+
+
+if __name__ == "__main__":
+    main()

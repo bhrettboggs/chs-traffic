@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.pytest_cache/
+cache/
+.ipynb_checkpoints/
+# generated artifacts (rebuild with the scripts)
+data/processed/*
+!data/processed/.gitkeep
+outputs/*
+!outputs/.gitkeep
+# OSM downloads are reproducible from scripts/01_fetch_osm.py; uncomment to stop committing them
+# data/raw/*.graphml
+# data/raw/*.osm
