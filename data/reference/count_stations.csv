@@ -5,28 +5,47 @@
 # Route-code readings: S-46 Rutledge, S-404 Calhoun, S-553 Coming, S-106 St. Philip, S-104/L-200 King,
 # S-107 Meeting, S-1015 Broad (station 442 label), S-393 Beaufain (station 407 runs Lockwood->King),
 # S-103 Ashley Ave (inferred from its limits Murray->Broad->Beaufain->Calhoun->US17; ~70% sure), S-99 Huger, S-3 Spring, S-1037 Cannon.
+# 2026-11-09 (P2): 426 and 419 re-mapped (Rutledge ends at Tradd, not Murray; Spring never meets Cannon in OSM). Stations from 640 down
+# were added after every AADT row was checked against the SCDOT PDF; their split was set by alternating in file order BEFORE any model run.
+# 171 and 718 used to be gateways. Guessed route codes: S-551 = Bee St (~70% sure), S-550 = Courtenay Dr (~65% sure).
+# cut (optional): 'lon=<value>' or 'lat=<value>'. The station then sums flow on EVERY edge of `road` that crosses that line,
+# which is needed for divided roads (two carriageways). from_street / to_street are ignored for those rows.
 # split = "calibrate" or "test" (alternating within each street: calibrate on half, test on the other half).
-station,road,from_street,to_street,mapping_confidence,split
-414,^Calhoun Street$,^Barre Street$,^Rutledge Avenue$,high,calibrate
-415,^Calhoun Street$,^Rutledge Avenue$,^East Bay Street$,medium,test
-439,^Meeting Street$,^Line Street$,^South Battery,low,calibrate
-423,^Rutledge Avenue$,^Mount Pleasant Street$,^Race Street$,high,calibrate
-458,^Rutledge Avenue$,^Race Street$,Septima,high,test
-425,^Rutledge Avenue$,Septima,^Calhoun Street$,medium,calibrate
-426,^Rutledge Avenue$,^Calhoun Street$,^Murray Boulevard$,medium,test
-431,^Coming Street$,^Beaufain Street$,^Spring Street$,low,calibrate
-432,^Coming Street$,^Spring Street$,^Race Street$,medium,test
-433,^St\. Philip Street$,^Calhoun Street$,^Beaufain Street$,high,calibrate
-438,^St\. Philip Street$,^Cannon Street$,^Calhoun Street$,high,test
-434,^St\. Philip Street$,^Line Street$,^Spring Street$,high,calibrate
-436,^King Street$,^Calhoun Street$,^Murray Boulevard$,medium,test
-437,^King Street$,^Line Street$,^John Street$,medium,calibrate
-403,^Broad Street$,^Lockwood Drive$,^East Bay Street$,medium,test
-407,^Beaufain Street$,^Lockwood Drive$,^King Street$,medium,calibrate
-429,^Ashley Avenue$,^Calhoun Street$,Septima,low,test
-454,^Ashley Avenue$,^Beaufain Street$,^Calhoun Street$,low,calibrate
-421,^Huger Street$,^President Street$,^Meeting Street$,high,test
-422,^Huger Street$,^Meeting Street$,^Morrison Drive$,high,calibrate
-419,^Spring Street$,^Meeting Street$,^Cannon Street$,low,test
-417,^Cannon Street$,Septima,^Coming Street$,medium,calibrate
-718,^Mount Pleasant Street$,^King Street$,^Meeting Street$,medium,test
+station,road,from_street,to_street,mapping_confidence,split,cut
+414,^Calhoun Street$,^Barre Street$,^Rutledge Avenue$,high,calibrate,
+415,^Calhoun Street$,^Rutledge Avenue$,^East Bay Street$,medium,test,
+439,^Meeting Street$,^Line Street$,^South Battery,low,calibrate,
+423,^Rutledge Avenue$,^Mount Pleasant Street$,^Race Street$,high,calibrate,
+458,^Rutledge Avenue$,^Race Street$,Septima,high,test,
+425,^Rutledge Avenue$,Septima,^Calhoun Street$,medium,calibrate,
+426,^Rutledge Avenue$,^Calhoun Street$,^Broad Street$,medium,test,
+431,^Coming Street$,^Beaufain Street$,^Spring Street$,low,calibrate,
+432,^Coming Street$,^Spring Street$,^Race Street$,medium,test,
+433,^St\. Philip Street$,^Calhoun Street$,^Beaufain Street$,high,calibrate,
+438,^St\. Philip Street$,^Cannon Street$,^Calhoun Street$,high,test,
+434,^St\. Philip Street$,^Line Street$,^Spring Street$,high,calibrate,
+436,^King Street$,^Calhoun Street$,^Murray Boulevard$,medium,test,
+437,^King Street$,^Line Street$,^John Street$,medium,calibrate,
+403,^Broad Street$,^Lockwood Drive$,^East Bay Street$,medium,test,
+407,^Beaufain Street$,^Lockwood Drive$,^King Street$,medium,calibrate,
+429,^Ashley Avenue$,^Calhoun Street$,Septima,low,test,
+454,^Ashley Avenue$,^Beaufain Street$,^Calhoun Street$,low,calibrate,
+421,^Huger Street$,^President Street$,^Meeting Street$,high,test,
+422,^Huger Street$,^Meeting Street$,^Morrison Drive$,high,calibrate,
+419,^Spring Street$,^Meeting Street$,Septima,medium,test,
+417,^Cannon Street$,Septima,^Coming Street$,medium,calibrate,
+718,^Mount Pleasant Street$,^King Street$,^Meeting Street$,medium,test,
+640,^Calhoun Street$,^James Island Expressway$,^Barre Street$,high,calibrate,
+171,^Morrison Drive$,^Huger Street$,^Mount Pleasant Street$,medium,test,
+145,^Meeting Street$,^Line Street$,^Mount Pleasant Street$,high,calibrate,
+180,^King Street$,^Huger Street$,^Line Street$,high,test,
+717,^Mount Pleasant Street$,^North Enston Avenue$,^King Street$,medium,calibrate,
+456,^Rutledge Avenue$,^Heriot Street$,^Mount Pleasant Street$,high,test,
+125,^Septima P\. Clark Parkway$,,,medium,calibrate,lon=-79.9505
+428,^President Street$,^Fishburne Street$,^Bee Street$,medium,test,
+596,^Fishburne Street$,^Lames Street$,^President Street$,medium,calibrate,
+560,^Hagood Avenue$,^Spring Street$,^Huger Street$,medium,test,
+427,^Huger Street$,^Hagood Avenue$,^President Street$,high,calibrate,
+585,^Bee Street$,^Lockwood Drive$,^Wescott Court$,low,test,
+583,^Courtenay Drive$,^Calhoun Street$,^Cannon Street$,low,calibrate,
+169,^East Bay Street$,^Broad Street$,^Morrison Drive$,low,test,

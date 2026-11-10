@@ -57,12 +57,19 @@ def load_blocks(lodes_dir: Path | str, D: nx.DiGraph, year: int = config.LODES_Y
     xw["lat"], xw["lon"] = xw.blklatdd.astype(float), xw.blklondd.astype(float)
     left, bottom, right, top = config.BBOX
     xw = xw[(xw.lon > left) & (xw.lon < right) & (xw.lat > bottom) & (xw.lat < top)]
-    wac = pd.read_csv(L / f"sc_wac_S000_JT00_{year}.csv.gz", dtype={"w_geocode": str}, usecols=["w_geocode", "C000"])
+    # CNS16 = health care and social assistance, CNS07 = retail, CNS18 = accommodation and food
+    wac = pd.read_csv(L / f"sc_wac_S000_JT00_{year}.csv.gz", dtype={"w_geocode": str},
+                      usecols=lambda c: c in {"w_geocode", "C000", "CNS16", "CNS07", "CNS18"})
+    for col in ("CNS16", "CNS07", "CNS18"):
+        if col not in wac:
+            wac[col] = 0
+    wac["jobs_health"], wac["jobs_retail_food"] = wac.CNS16, wac.CNS07 + wac.CNS18
+    wac = wac[["w_geocode", "C000", "jobs_health", "jobs_retail_food"]]
     rac = pd.read_csv(L / f"sc_rac_S000_JT00_{year}.csv.gz", dtype={"h_geocode": str}, usecols=["h_geocode", "C000"])
     b = (xw[["tabblk2020", "trct", "lat", "lon"]].rename(columns={"tabblk2020": "block"})
          .merge(wac.rename(columns={"w_geocode": "block", "C000": "jobs"}), how="left")
          .merge(rac.rename(columns={"h_geocode": "block", "C000": "workers"}), how="left")
-         .fillna({"jobs": 0, "workers": 0}))
+         .fillna({"jobs": 0, "workers": 0, "jobs_health": 0, "jobs_retail_food": 0}))
     nodes = eligible_nodes(D)
     tree = cKDTree(_xy([D.nodes[n]["y"] for n in nodes], [D.nodes[n]["x"] for n in nodes]))
     b["snap_m"] = tree.query(_xy(b.lat, b.lon))[0]
@@ -125,7 +132,8 @@ def build(D: nx.DiGraph, lodes_dir: Path | str, year: int = config.LODES_YEAR, k
     b["workers_external"] = (b.workers - b.workers_internal).clip(lower=0)
 
     g = b.groupby("zone")
-    zones = g[["jobs", "workers", "jobs_internal", "jobs_external", "workers_internal", "workers_external"]].sum()
+    zones = g[["jobs", "workers", "jobs_internal", "jobs_external", "workers_internal", "workers_external",
+               "jobs_health", "jobs_retail_food"]].sum()
     zones["n_blocks"] = g.size()
     zones["lat"] = g.apply(lambda d: np.average(d.lat, weights=d.jobs + d.workers))
     zones["lon"] = g.apply(lambda d: np.average(d.lon, weights=d.jobs + d.workers))
@@ -150,6 +158,7 @@ def build(D: nx.DiGraph, lodes_dir: Path | str, year: int = config.LODES_YEAR, k
     report = dict(
         year=year, blocks_with_activity=len(b), zones=len(zones),
         jobs=float(b.jobs.sum()), workers=float(b.workers.sum()),
+        jobs_health=float(b.jobs_health.sum()), jobs_retail_food=float(b.jobs_retail_food.sum()),
         jobs_in_od=float(b.jobs_internal.sum() + b.jobs_external.sum()),
         internal_commuters=float(internal.commuters.sum()),
         intrazonal_commuters=float(internal[internal.o_zone == internal.d_zone].commuters.sum()),

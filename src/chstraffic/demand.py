@@ -49,6 +49,7 @@ class Zones:
     zone_of: dict = None    # dests/origins key -> zone id (one zone has several connector keys)
     connectors: dict = None  # zone id -> [(node, share), ...]
     internal: dict = None   # (origin zone, dest zone) -> LODES commuters, intrazonal dropped
+    job_weight: dict = None  # zone id -> peak-hour weight of its jobs (config.HEALTH_JOB_WEIGHT), 1 = no change
 
 
 def _road_nodes(D, road):
@@ -119,14 +120,19 @@ def _load_lodes_zones(D, ref_dir: Path, zones: Zones) -> None:
         raise ValueError(f"{len(missing)} connector nodes are not in the graph; rerun scripts/06_build_zones.py")
     zrow = z.set_index("zone")
     zones.origins, zones.zone_of, zones.connectors = {}, {}, {}
+    health = zrow.jobs_health / zrow.jobs.clip(lower=1) if "jobs_health" in zrow else zrow.jobs * 0.0
+    zones.job_weight = {zone: 1.0 - (1.0 - config.HEALTH_JOB_WEIGHT) * float(h) for zone, h in health.items()}
+    retail = zrow.jobs_retail_food if "jobs_retail_food" in zrow else zrow.jobs * 0.0
+    nonwork = config.NONWORK_RETAIL_FOOD_WEIGHT * retail + config.NONWORK_RESIDENT_WEIGHT * zrow.workers
     for zone, grp in con.groupby("zone"):
         tot = float(grp.share.sum())             # shares are stored rounded; make them sum to 1
         zones.connectors[zone] = [(int(n), float(s) / tot) for n, s in zip(grp.node, grp.share)]
         for i, (node, share) in enumerate(zones.connectors[zone]):
             key = f"{zone}#{i}"
             zones.zone_of[key] = zone
-            zones.dests[key] = (node, float(zrow.jobs_external[zone]) * share)
-            zones.origins[key] = (node, float(zrow.workers_external[zone]) * share)
+            extra = float(nonwork[zone])
+            zones.dests[key] = (node, (float(zrow.jobs_external[zone]) * zones.job_weight[zone] + extra) * share)
+            zones.origins[key] = (node, (float(zrow.workers_external[zone]) + extra) * share)
     zones.internal = {(o, d): float(q) for o, d, q in internal.itertuples(index=False) if o != d}
 
 
@@ -216,7 +222,13 @@ def through_flows(zones: Zones, gateway_scale: dict, through_share: dict) -> dic
     for g, (_, vph) in zones.gateways.items():
         for sink_name, share in through_share.get(g, {}).items():
             if sink_name in zones.sinks:
-                flows[(g, sink_name)] = vph * gateway_scale.get(g, 1.0) * share
+                flows[(g, sink_name)] = vph * gateway_scale.get(g, 1.0) * min(share * config.THROUGH_SCALE, 1.0)
+    for g, (_, vph) in zones.gateways.items():       # shares of one gateway may not add up to more than 1
+        mine = [k for k in flows if k[0] == g]
+        tot, cap = sum(flows[k] for k in mine), vph * gateway_scale.get(g, 1.0)
+        if tot > cap > 0:
+            for k in mine:
+                flows[k] *= cap / tot
     if zones.outbound:
         for g, (_, out_vph) in zones.outbound.items():
             into = [k for k in flows if k[1] == f"{g}_out"]
@@ -236,7 +248,8 @@ def internal_vph(zones: Zones, attraction_scale: dict | None = None, internal_sc
     back, so internal_scale alone sets the volume.
     """
     attraction_scale = attraction_scale or {}
-    raw = {k: q * attraction_scale.get(k[1], 1.0) for k, q in zones.internal.items()}
+    jw = zones.job_weight or {}
+    raw = {k: q * attraction_scale.get(k[1], 1.0) * jw.get(k[1], 1.0) for k, q in zones.internal.items()}
     base, tot = sum(zones.internal.values()), sum(raw.values())
     f = config.INTERNAL_VEH_PER_COMMUTER * internal_scale * (base / tot if tot > 0 else 0.0)
     return {k: q * f for k, q in raw.items()}

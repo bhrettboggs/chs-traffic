@@ -122,3 +122,44 @@ def test_lodes_scenarios_vary_internal_volume(toy_lodes, tmp_path, monkeypatch):
     base = sum(z.internal.values()) * config.INTERNAL_VEH_PER_COMMUTER
     lo, hi = config.SCENARIO_INTERNAL_RANGE
     assert internal.std() > 0 and np.all(internal <= hi * base + 1e-9) and np.all(internal >= 0.8 * lo * base)
+
+
+def test_through_shares_of_one_gateway_cannot_exceed_its_volume(monkeypatch):
+    z = demand.Zones(gateways={"a": ("a_in", 1000.0)}, sinks={"b_out": "b_x", "c_out": "c_x"},
+                     dests={}, snap_report=[])
+    monkeypatch.setattr(config, "THROUGH_SCALE", 2.0)
+    flows = demand.through_flows(z, {}, {"a": {"b_out": 0.4, "c_out": 0.4}})   # 2 x 0.8 = 160% of a
+    assert sum(flows.values()) == pytest.approx(1000.0)
+
+
+def test_health_weight_and_nonwork_weights_shift_zone_weights(toy_lodes, tmp_path, monkeypatch):
+    D, path, _, _ = toy_lodes
+    base = _lodes_zones(D, path, tmp_path, monkeypatch)
+    ref = tmp_path / "ref"
+    zl = pd.read_csv(ref / "zones_lodes.csv")
+    zl["jobs_health"] = np.where(zl.zone == "z001", zl.jobs, 0.0)             # z001 is all hospital
+    zl.to_csv(ref / "zones_lodes.csv", index=False)
+    monkeypatch.setattr(config, "HEALTH_JOB_WEIGHT", 0.5)
+    monkeypatch.setattr(config, "NONWORK_RESIDENT_WEIGHT", 2.0)
+    z = demand.load_zones(D, ref / "zones.csv")
+    row = zl.set_index("zone")
+    def total(zz, zone):
+        return sum(w for k, (_, w) in zz.items() if k.startswith(zone + "#"))
+    for zone in ("z001", "z002"):
+        hw = 0.5 if zone == "z001" else 1.0
+        assert total(z.dests, zone) == pytest.approx(row.jobs_external[zone] * hw + 2.0 * row.workers[zone])
+        assert total(z.origins, zone) == pytest.approx(row.workers_external[zone] + 2.0 * row.workers[zone])
+        assert total(base.dests, zone) == pytest.approx(row.jobs_external[zone])
+
+
+def test_cut_edges_finds_both_carriageways():
+    import networkx as nx
+    from chstraffic import calibrate
+    G = nx.DiGraph()
+    for n, (x, y) in {"a": (0.0, 0.0), "b": (1.0, 0.0), "c": (1.0, 0.1), "d": (0.0, 0.1), "e": (2.0, 0.0)}.items():
+        G.add_node(n, x=x, y=y)
+    G.add_edge("a", "b", name="Parkway")       # eastbound carriageway
+    G.add_edge("c", "d", name="Parkway")       # westbound carriageway
+    G.add_edge("b", "e", name="Parkway")       # does not cross x = 0.5
+    G.add_edge("a", "c", name="Side Street")   # crosses, wrong name
+    assert sorted(calibrate.cut_edges(G, "^Parkway$", "lon=0.5")) == [("a", "b"), ("c", "d")]

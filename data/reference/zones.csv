@@ -7,19 +7,22 @@
 # Check: mt_pleasant_st (station 718) is on Mount Pleasant St east of King St Ext and may double-count I-26 exits.
 # 2026-11-09: with config.ZONE_SOURCE = "lodes" (the default) the dest rows below are NOT used; zones come from
 # zones_lodes.csv / zone_connectors.csv / internal_od.csv (scripts/06_build_zones.py). Gateway rows are always used.
-# MISSING GATEWAY: the James Island Expressway (SC 30) is in the graph (source node 628582954, sink 1842623201) but has no row
-# here because the count file has no SC 30 station. Add jic / jic_out rows once its AADT is read from the SCDOT PDF.
+# 2026-11-09 (P2), every gateway re-checked against the SCDOT PDF section limits and the graph's cut points:
+#  * added jic (SC 30, station 412); * i26 now uses 2205 (the stub is upstream of the Heriot and Mount Pleasant St exits);
+#  * REMOVED morrison (171) and mt_pleasant_st (718): both are interior street sections, fed by the I-26 / Ravenel ramps and Meeting St,
+#    so they double counted that traffic. They are calibration stations now (count_stations.csv).
+#  * meeting_n and king_ext now use the sections that cross the north edge of the box (147, 177).
 # aadt = SCDOT 2025, both directions, 24 h (data/raw/scdot_aadt_2025_peninsula.csv); spot-check vs the PDF.
 zone_id,kind,name,lat,lon,snap_road,aadt,aadt_station,attraction,notes
-i26,gateway_in,I-26 eastbound into the peninsula,32.81932,-79.95500,,79700,2209,,motorway source stub (no name in OSM)
+i26,gateway_in,I-26 eastbound into the peninsula,32.81932,-79.95500,,98100,2205,,motorway source stub north of the Heriot St and Mount Pleasant St exits (both ramps are in the graph)
 ravenel,gateway_in,US 17 Ravenel Bridge westbound,32.80498,-79.93648,,98900,127,,motorway source stub
-crosstown,gateway_in,US 17 Ashley bridges / Crosstown eastbound,32.78015,-79.96740,Savannah Highway,78600,125,,trunk source stub
-meeting_n,gateway_in,US 52 Meeting St from the north,32.82547,-79.95187,^Meeting Street$,21000,145,,north end of Meeting in the box
-morrison,gateway_in,US 52 Spur Morrison Dr,32.81236,-79.95041,^Morrison Drive$,19700,171,,north end of Morrison in the box
-mt_pleasant_st,gateway_in,Mount Pleasant St (S-49),32.81244,-79.95103,^Mount Pleasant Street$,16600,718,,snaps within ~60 m of Morrison
-king_ext,gateway_in,US 78 King St Ext,32.82380,-79.95262,^King Street$,10200,180,,OSM names it King Street
+crosstown,gateway_in,US 17 Ashley River bridges eastbound,32.78015,-79.96740,Savannah Highway,79000,123,,trunk source stub; station 123 is the bridge section (125 is the Crosstown east of Lockwood)
+meeting_n,gateway_in,US 52 Meeting St from the north,32.82547,-79.95187,^Meeting Street$,14200,147,,north end of Meeting in the box; 147 = Morrison/Mt Pleasant St to Little Ave (145 is Line to Mt Pleasant St: interior)
+jic,gateway_in,SC 30 James Island Expressway northbound,32.77137,-79.95802,James Island Expressway,67400,412,,motorway source stub on the bridge; 412 = Harbor View Rd to US 17 (the counter's exact spot is not published)
+king_ext,gateway_in,US 78 King St Ext from the north,32.82380,-79.95262,^King Street$,9400,177,,OSM names it King Street; 177 = Carner Ave to I-26 (180 is Huger to Line: interior)
 i26_out,gateway_out,I-26 westbound out,32.81880,-79.95491,,,,,motorway sink stub
 ravenel_out,gateway_out,Ravenel Bridge eastbound out,32.80495,-79.93330,,,,,motorway sink stub
+jic_out,gateway_out,James Island Expressway southbound out,32.77277,-79.95819,James Island Expressway,,,,motorway sink stub
 crosstown_out,gateway_out,US 17 westbound out,32.78119,-79.96717,,,,,sink stub (Saint Andrews Blvd / trunk link)
 musc,dest,MUSC / medical district,32.78490,-79.94900,,,,30,placeholder weight
 cofc,dest,College of Charleston,32.78380,-79.93730,,,,12,placeholder weight

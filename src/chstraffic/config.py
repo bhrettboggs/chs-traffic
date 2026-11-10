@@ -106,10 +106,13 @@ AM_INBOUND_SPLIT = 0.60
 # another gateway without entering the street grid. ASSUMPTION, no source yet.
 # {origin gateway: {destination gateway_out: share}}
 THROUGH_SHARE = {
-    "ravenel":   {"i26_out": 0.35, "crosstown_out": 0.10},
-    "i26":       {"ravenel_out": 0.20, "crosstown_out": 0.15},
+    "ravenel":   {"i26_out": 0.35, "crosstown_out": 0.10, "jic_out": 0.05},
+    "i26":       {"ravenel_out": 0.20, "crosstown_out": 0.15, "jic_out": 0.05},
     "crosstown": {"i26_out": 0.25, "ravenel_out": 0.10},
+    "jic":       {"i26_out": 0.15, "ravenel_out": 0.10},
 }
+# One multiplier on every share above; the knob calibration turns (scripts/07_tune.py).
+THROUGH_SCALE = 1.0
 
 # Through trips into one exit gateway may take at most this share of that gateway's AM
 # outbound volume; the rest must start on the peninsula. ASSUMPTION. It binds today:
@@ -146,6 +149,17 @@ MAX_CONNECTORS_PER_ZONE = 4        # a zone keeps its heaviest nodes
 # errands, deliveries), which LODES does not see and which here simply copy the commute
 # pattern. Scenarios vary it by SCENARIO_INTERNAL_RANGE. Calibrate in P2.
 INTERNAL_VEH_PER_COMMUTER = 0.25
+# Weight of a health-care job (LODES sector CNS16) as a peak-hour trip attractor, relative to
+# any other job. Below 1 because hospitals work in shifts that start outside the peak hour and
+# because LODES can report a health system's off-site staff at its main address. Three blocks
+# around MUSC hold 26% of all peninsula jobs. A calibration knob (scripts/07_tune.py), no source.
+HEALTH_JOB_WEIGHT = 1.0
+# Non-work activity added to a zone's weight as a trip end, for gateway trips in both directions:
+#   weight += NONWORK_RETAIL_FOOD_WEIGHT x (retail + accommodation/food jobs, LODES CNS07 + CNS18)
+#           + NONWORK_RESIDENT_WEIGHT x (resident workers, a stand-in for population).
+# 0 = commute-only weights. Calibration knobs (scripts/07_tune.py --grid nonwork), no source.
+NONWORK_RETAIL_FOOD_WEIGHT = 0.0
+NONWORK_RESIDENT_WEIGHT = 0.0
 SCENARIO_INTERNAL_RANGE = (0.5, 1.5)   # multiplier on internal demand, per scenario
 
 # Gravity model deterrence f(c) = exp(-beta * c), c = free-flow minutes.
