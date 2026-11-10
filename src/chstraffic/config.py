@@ -111,9 +111,42 @@ THROUGH_SHARE = {
     "crosstown": {"i26_out": 0.25, "ravenel_out": 0.10},
 }
 
+# Through trips into one exit gateway may take at most this share of that gateway's AM
+# outbound volume; the rest must start on the peninsula. ASSUMPTION. It binds today:
+# THROUGH_SHARE sends more traffic to I-26 than I-26's outbound count holds, so the two
+# guesses (THROUGH_SHARE, AM_INBOUND_SPLIT) disagree with each other. Source both in P2.
+THROUGH_MAX_SHARE_OF_EXIT = 0.80
+
 # Load AM OUTBOUND trips too (gateway volume x (1 - AM_INBOUND_SPLIT)). The counts used
 # for calibration are two-way, so an inbound-only model can't match them.
 INCLUDE_OUTBOUND = True
+
+# ---------------------------------------------------------------------------
+# Zones from Census LEHD LODES (lodes.py, scripts/06_build_zones.py)
+# ---------------------------------------------------------------------------
+# "lodes": zones, connectors and internal commutes from data/reference/zones_lodes.csv,
+# zone_connectors.csv and internal_od.csv. "hand": the 11 hand-placed dest rows in zones.csv.
+ZONE_SOURCE = "lodes"
+LODES_YEAR = 2024   # LODES 8.5, data vintage 20261014, JT00 (all jobs), S000 (all workers)
+# 2020 census tracts (Charleston County, FIPS 45019) on the peninsula inside BBOX. Read off the
+# LODES crosswalk 2026-11-09: every tract with a block within 250 m of a non-frozen graph node,
+# minus tract 30 (west bank of the Ashley; its traffic enters through the crosstown gateway).
+PENINSULA_TRACTS = ["45019000100", "45019000200", "45019000400", "45019000500", "45019000600",
+                    "45019000700", "45019000900", "45019001000", "45019001100", "45019001500",
+                    "45019004400", "45019005100", "45019005300", "45019005400", "45019005900"]
+N_ZONES = 90                       # weighted k-means clusters of blocks (weight = jobs + workers)
+ZONE_BLOCK_MAX_SNAP_M = 400.0      # blocks farther than this from a loadable node are dropped
+CONNECTOR_NODES_PER_BLOCK = 3      # a block spreads over its 3 nearest loadable nodes (1/distance)
+MAX_CONNECTORS_PER_ZONE = 4        # a zone keeps its heaviest nodes
+
+# AM peak-hour VEHICLE trips per peninsula-internal LODES commuter (lives and works on the
+# peninsula, different zones). ASSUMPTION, NO SOURCE. Rough build-up: 0.75 at work that day
+# x 0.5 driving (short trips, high walk/bike share) x 0.3 of AM commutes in the peak hour
+# = 0.11 commute trips, x ~2.2 to stand in for non-work internal trips (school runs,
+# errands, deliveries), which LODES does not see and which here simply copy the commute
+# pattern. Scenarios vary it by SCENARIO_INTERNAL_RANGE. Calibrate in P2.
+INTERNAL_VEH_PER_COMMUTER = 0.25
+SCENARIO_INTERNAL_RANGE = (0.5, 1.5)   # multiplier on internal demand, per scenario
 
 # Gravity model deterrence f(c) = exp(-beta * c), c = free-flow minutes.
 GRAVITY_BETA = 0.10

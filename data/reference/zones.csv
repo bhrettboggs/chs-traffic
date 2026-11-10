@@ -5,6 +5,10 @@
 # Removed 2026-11-09: a 'lockwood' gateway that used station 403 (11,000). Route S-1015 is Broad St (see station 442),
 # so 403 is Broad St inside the grid, and Lockwood traffic already arrives via the Ashley bridges / crosstown gateway.
 # Check: mt_pleasant_st (station 718) is on Mount Pleasant St east of King St Ext and may double-count I-26 exits.
+# 2026-11-09: with config.ZONE_SOURCE = "lodes" (the default) the dest rows below are NOT used; zones come from
+# zones_lodes.csv / zone_connectors.csv / internal_od.csv (scripts/06_build_zones.py). Gateway rows are always used.
+# MISSING GATEWAY: the James Island Expressway (SC 30) is in the graph (source node 628582954, sink 1842623201) but has no row
+# here because the count file has no SC 30 station. Add jic / jic_out rows once its AADT is read from the SCDOT PDF.
 # aadt = SCDOT 2025, both directions, 24 h (data/raw/scdot_aadt_2025_peninsula.csv); spot-check vs the PDF.
 zone_id,kind,name,lat,lon,snap_road,aadt,aadt_station,attraction,notes
 i26,gateway_in,I-26 eastbound into the peninsula,32.81932,-79.95500,,79700,2209,,motorway source stub (no name in OSM)

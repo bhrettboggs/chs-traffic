@@ -13,4 +13,6 @@ outputs/*
 # OSM downloads are reproducible from scripts/01_fetch_osm.py; uncomment to stop committing them
 # data/raw/*.graphml
 # data/raw/*.osm
+# Census LODES downloads (17.5 MB); URLs and checksums in data/raw/README.md
+data/raw/lodes/
 HANDOFF.md
