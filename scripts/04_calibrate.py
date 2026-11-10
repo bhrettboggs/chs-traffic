@@ -21,7 +21,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from chstraffic import config, demand  # noqa: E402
-from chstraffic.calibrate import baseline_graph, fit_table, load_counts, summary  # noqa: E402
+from chstraffic.calibrate import baseline_graph, fit_table, load_counts, screenline_table, summary  # noqa: E402
 from chstraffic.fast_assignment import Network, user_equilibrium  # noqa: E402
 
 config_default_source = config.ZONE_SOURCE
@@ -60,6 +60,13 @@ def main() -> None:
                   f"GEH<10 {m['geh10']:.0%}, median GEH {m['median_geh']:.1f}, model/count total {m['total_ratio']:.2f}, "
                   f"median |log2 ratio| {m['log2']:.2f}")
     print(f"unmatched: {df.geh.isna().sum()}")
+    lines = pd.read_csv(ROOT / "data" / "reference" / "screenlines.csv", comment="#")
+    sl = screenline_table(df, lines)
+    sl.to_csv(out / "screenlines.csv", index=False)
+    print("\nScreenlines (parallel streets summed; tolerance = FHWA maximum desirable deviation):")
+    print(sl.drop(columns=["name"]).to_string(index=False))
+    print(f"pass: {int(sl.passes.sum())} of {len(sl)} (middle segment), "
+          f"{int(sl.passes_section.sum())} of {len(sl)} (section mean)")
     n_od = len({k for od in ods for k in od})
     print(f"zone source: {args.zone_source}; {n_od} O-D pairs; median demand "
           f"{np.median([sum(od.values()) for od in ods]):,.0f} vph; max UE gap {max_gap:.1e}")

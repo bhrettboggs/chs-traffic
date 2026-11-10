@@ -163,3 +163,20 @@ def test_cut_edges_finds_both_carriageways():
     G.add_edge("b", "e", name="Parkway")       # does not cross x = 0.5
     G.add_edge("a", "c", name="Side Street")   # crosses, wrong name
     assert sorted(calibrate.cut_edges(G, "^Parkway$", "lon=0.5")) == [("a", "b"), ("c", "d")]
+
+
+def test_screenline_sums_parallel_streets_and_applies_tolerance():
+    from chstraffic import calibrate
+    assert calibrate.max_desirable_deviation(20_000) == pytest.approx(0.45)
+    assert calibrate.max_desirable_deviation(30_000) == pytest.approx(0.40)        # halfway 20k..40k
+    assert calibrate.max_desirable_deviation(1_000_000) == pytest.approx(0.20)     # flat beyond the last point
+    df = pd.DataFrame(dict(station=[1, 2, 3], aadt=[10_000, 10_000, 20_000], count_peak=[900, 900, 1800],
+                           geh=[1.0, 1.0, 1.0]))
+    # street 1 is 400 too high, street 2 is 400 too low: the screenline total is exact
+    df.attrs["per_scenario"] = {1: (np.array([1300.0, 1300.0]), np.array([1000.0, 1000.0])),
+                                2: (np.array([500.0, 500.0]), np.array([900.0, 900.0])),
+                                3: (np.array([900.0, 900.0]), np.array([1800.0, 1800.0]))}
+    lines = pd.DataFrame(dict(screenline=["X", "Y"], name=["pair", "single"], stations=["1 2", "3"]))
+    sl = calibrate.screenline_table(df, lines).set_index("screenline")
+    assert sl.model["X"] == 1800 and sl.deviation["X"] == 0 and bool(sl.passes["X"])
+    assert sl.deviation["Y"] == -0.5 and not bool(sl.passes["Y"]) and bool(sl.passes_section["Y"])

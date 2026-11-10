@@ -1,0 +1,13 @@
+# Screenlines: groups of count stations on parallel streets that cross the same imaginary line, so the
+# model is judged on the total crossing it and not on which parallel street it picked. Written 2026-11-09.
+# Membership is a judgment call: SCDOT sections are long and do not line up exactly; a station may sit in
+# only one screenline. Stations 422, 717, 718 and 640 are in none (too few parallel streets, or a second
+# count on a street already in the line). direction = the direction of travel that crosses the line.
+# Low-confidence station mappings inside these lines: 169, 583, 585, 439, 431, 429, 454.
+screenline,name,direction,stations,notes
+A,Upper peninsula (Race St to Mount Pleasant St),north-south,171 145 180 423,Morrison / Meeting / King / Rutledge. I-26 is not in it (unnamed in OSM; checked separately)
+B,Line St to Spring St band,north-south,437 434 432 458 560 428,King / St. Philip / Coming / Rutledge / Hagood / President
+C,Calhoun St to Cannon St band,north-south,425 429 431 438 439 169 583,Rutledge / Ashley / Coming / St. Philip / Meeting / East Bay / Courtenay
+D,South of Calhoun St,north-south,426 454 433 436,Rutledge / Ashley / St. Philip / King. Small total (10500 AADT)
+E,West side (Lockwood Dr to Rutledge Ave),east-west,414 407 403 585 125 596 427,Calhoun / Beaufain / Broad / Bee / Crosstown / Fishburne / Huger. The Crosstown is 62% of the count
+F,Middle (Rutledge Ave to Meeting St),east-west,415 417 419 421,Calhoun / Cannon / Spring / Huger

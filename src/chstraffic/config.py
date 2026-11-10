@@ -189,3 +189,14 @@ WIDTH_MATCH_MAX_M = 15.0
 # which the inventory doesn't record, decides it. Width is kept as data, not as a lane count.
 # Priority if ON: overrides.csv > explicit OSM lanes tag > city width > class default.
 USE_WIDTH_LANES = False
+
+# ---------------------------------------------------------------------------
+# Screenline validation (calibrate.screenline_table)
+# ---------------------------------------------------------------------------
+# FHWA "maximum desirable deviation in total screenline volumes" (Model Validation and
+# Reasonableness Checking Manual, 1997, fig. 7-2; curve from NCHRP Report 255), read as
+# (daily screenline volume, allowed error) points quoted in published MPO validation memos:
+# Mendocino COG (20k 45%, 40k 35%, 60k 30%, 80k 28%, 200k+ 20%) and MACORTS (11.6k 60%).
+# Not read off the original figure. Values between points are interpolated.
+SCREENLINE_TOLERANCE = [(10_000, 0.60), (20_000, 0.45), (40_000, 0.35), (60_000, 0.30),
+                        (80_000, 0.28), (200_000, 0.20)]
