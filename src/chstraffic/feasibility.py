@@ -74,8 +74,11 @@ def _override_for(seg_osmids: set, name, rows):
     return by_name
 
 
-def segment_table(D: nx.DiGraph, overrides: list[dict] | None = None) -> dict[frozenset, Segment]:
+def segment_table(D: nx.DiGraph, overrides: list[dict] | None = None,
+                  widths: dict | None = None) -> dict[frozenset, Segment]:
+    """widths: {segment_id: lanes} from widths.load(); used only where OSM has no lanes tag."""
     overrides = overrides or []
+    widths = widths or {}
     edges_by_seg: dict[frozenset, list] = {}
     for u, v, d in D.edges(data=True):
         edges_by_seg.setdefault(d["segment_id"], []).append((u, v, d))
@@ -93,6 +96,9 @@ def segment_table(D: nx.DiGraph, overrides: list[dict] | None = None) -> dict[fr
         hwy, name = d0["highway"], d0.get("name")
         osmids = {str(d.get("osmid")) for _, _, d in es}
         frozen_reason, src = None, "osm"
+        if (config.USE_WIDTH_LANES and sid in widths and not d0.get("lanes_tagged", True)
+                and not d0.get("seg_total_lanes")):
+            total, src = widths[sid], "city width"
         ov = _override_for(osmids, name, overrides)
         if ov:
             if ov.get("total_lanes"):

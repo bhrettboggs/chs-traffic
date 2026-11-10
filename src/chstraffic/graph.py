@@ -98,6 +98,7 @@ def build_digraph(G_osm: nx.MultiDiGraph) -> nx.DiGraph:
             capacity_vph=cap, highway=hwy, name=_first(d.get("name")),
             oneway=oneway, segment_id=frozenset((u, v)),
             osmid=_first(d.get("osmid")),
+            lanes_tagged=total_lanes is not None,
         )
         if D.has_edge(u, v):
             e = D[u][v]

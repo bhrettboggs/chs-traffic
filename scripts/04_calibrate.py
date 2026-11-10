@@ -24,7 +24,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility  # noqa: E402
+from chstraffic import config, demand, feasibility, widths  # noqa: E402
 from chstraffic.fast_assignment import Network, user_equilibrium  # noqa: E402
 
 
@@ -63,7 +63,8 @@ def main() -> None:
     args = ap.parse_args()
 
     D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
-    table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"))
+    table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
+                                        widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     B = feasibility.apply_config(D, table, feasibility.baseline_config(table))
     zones = demand.load_zones(B, ROOT / "data" / "reference" / "zones.csv")
     ods = demand.scenarios(B, zones, n=args.scenarios)

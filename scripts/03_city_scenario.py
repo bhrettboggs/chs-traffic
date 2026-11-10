@@ -21,7 +21,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility, robust  # noqa: E402
+from chstraffic import config, demand, feasibility, widths, robust  # noqa: E402
 
 STREETS = ["Coming Street", "Rutledge Avenue", "Ashley Avenue"]
 
@@ -33,7 +33,8 @@ def main() -> None:
     args = ap.parse_args()
 
     D = pickle.loads(args.graph.read_bytes())
-    table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"))
+    table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
+                                        widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     base_cfg = feasibility.baseline_config(table)
     B = feasibility.apply_config(D, table, base_cfg)
     zones = demand.load_zones(B, ROOT / "data" / "reference" / "zones.csv")

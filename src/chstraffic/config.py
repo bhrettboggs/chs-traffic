@@ -124,3 +124,21 @@ SCENARIO_GATEWAY_SPREAD = 0.20     # each gateway volume x U(0.8, 1.2)
 SCENARIO_ATTRACTION_SIGMA = 0.30   # each zone weight x lognormal(0, 0.3)
 SCENARIO_BETA_RANGE = (0.05, 0.20)
 SCENARIO_SEED = 2026
+
+# ---------------------------------------------------------------------------
+# Street widths (widths.py): City of Charleston pavement inventory, curb-to-curb
+# ---------------------------------------------------------------------------
+# Travel lanes a street can carry = floor((width - parking) / LANE_WIDTH_FT), keeping
+# parking on one side (both sides if width >= BOTH_SIDE_PARKING_MIN_FT). ASSUMPTIONS.
+LANE_WIDTH_FT = 10.0
+PARKING_LANE_FT = 8.0
+BOTH_SIDE_PARKING_MIN_FT = 36.0
+# A city section matches a graph segment if it has the same street name and lies
+# within this distance of the segment's quarter, middle and three-quarter points.
+WIDTH_MATCH_MAX_M = 15.0
+# Use width-derived lanes for segments with no OSM lanes tag? OFF: on the 608 segments where OSM
+# does tag lanes, no width rule matched better than 62% (lane width x parking grid search,
+# 2026-11-09). One-way 1-lane streets have median width 26 ft vs 29 ft for 2-lane ones; parking,
+# which the inventory doesn't record, decides it. Width is kept as data, not as a lane count.
+# Priority if ON: overrides.csv > explicit OSM lanes tag > city width > class default.
+USE_WIDTH_LANES = False

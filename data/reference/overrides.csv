@@ -5,12 +5,12 @@
 # Source for these rows (2026-11-09): City of Charleston pavement inventory, Charleston County GIS layer
 #   Public_Works/Pavement_Condition_2024 (gisccapps.charlestoncounty.org), field CHSC_WIDTH = curb-to-curb ft.
 #   Its NUMBER_OF_ lane field appears to count parking lanes too (St. Philip 36 ft = "4"), so it is not used.
-# Rule (ASSUMPTION): travel lanes = floor((width - parking) / 10 ft), parking = 16 ft if width >= 36 else 8 ft,
+# Rule (ASSUMPTION, only ~62% right where OSM tags lanes; see HANDOFF 9): travel lanes = floor((width - parking) / 10 ft), parking = 16 ft if width >= 36 else 8 ft,
 #   i.e. keep at least one side of parking. A width of 30 ft therefore allows 2 lanes only with one parking side.
 # Explicit OSM lanes tags were overridden only where the same city section has 2-lane neighbors.
 # Meeting St is not in the city inventory (state route); its segments are unchanged.
 name,osmid,total_lanes,frozen,source,note
-Coming Street,38730522,2,,city pavement 2024,COMING ST (SPRING ST - US HWY 17) 30 ft; OSM untagged
+Coming Street,38730522,2,,city pavement 2024,COMING ST (SPRING ST - US HWY 17) 30 ft; OSM untagged. WEAK: width rule is ~62% reliable (HANDOFF 9); verify striping on site
 Rutledge Avenue,391527983,2,,city pavement 2024,RUTLEDGE AV (CAROLINA ST - CONGRESS ST) 35 ft; OSM untagged one-way
 Rutledge Avenue,78412406,2,,city pavement 2024,RUTLEDGE AV (COURTLAND AV - RUTLEDGE AV) 33 ft; OSM untagged one-way
 Rutledge Avenue,143986208,2,,city pavement 2024,RUTLEDGE AV (BEAUFAIN ST - CALHOUN ST) 31 ft; OSM lanes=1 but 2-lane neighbors
