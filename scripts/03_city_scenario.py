@@ -86,7 +86,7 @@ def main() -> None:
     res.to_csv(out / "city_scenario.csv", index=False)
     blk.to_csv(out / "city_scenario_blocked.csv", index=False)
     print(f"\nwrote {out / 'city_scenario.csv'} and city_scenario_blocked.csv")
-    print("UNCALIBRATED (HANDOFF step D not done). Don't quote these numbers yet.")
+    print("UNCALIBRATED: link-level calibration failed and 4 of 6 screenlines pass. Relative comparison only.")
 
 
 if __name__ == "__main__":

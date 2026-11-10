@@ -85,6 +85,21 @@ DIVIDED_MAX_SEP_M = 60.0
 # crosses a street of one of these classes.
 MAJOR_HIGHWAYS = {"motorway", "trunk", "primary", "secondary"}
 
+# Coarse decision set for the search (feasibility.search_corridors): 46 corridors on the real graph
+# instead of 482. A corridor is a decision only if most of its length is one of SEARCH_CLASSES, it is
+# at least SEARCH_MIN_LENGTH_M long, and it is split only where it crosses a SEARCH_SPLIT_HIGHWAYS street.
+# Residential streets (St. Philip included) keep today's direction.
+SEARCH_CLASSES = {"primary", "secondary", "tertiary"}
+SEARCH_SPLIT_HIGHWAYS = {"motorway", "trunk", "primary"}
+SEARCH_MIN_LENGTH_M = 300.0
+# Two-stage evaluation (scripts/09_search.py): every candidate on a few scenarios at a loose gap,
+# then the best few on all scenarios at UE_GAP_SEARCH. The screening threshold is deliberately
+# easier than MIN_MEAN_IMPROVEMENT so a real improvement is not lost to screening noise.
+SEARCH_SCREEN_SCENARIOS = 3
+SEARCH_SCREEN_GAP = 1e-3
+SEARCH_SCREEN_MIN_IMPROVEMENT = 0.0005
+SEARCH_CONFIRM_TOP = 4
+
 # Tier-1 screen: mean free-flow O-D time may grow by at most this factor.
 SCREEN_MAX_DETOUR = 1.25
 

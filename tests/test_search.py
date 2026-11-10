@@ -131,3 +131,20 @@ def test_greedy_never_worse_than_baseline(grid):
     assert ev.tstt_h.mean() <= base_ev.tstt_h.mean() + 1e-9
     for _, _, _, s in log.accepted:
         assert s.accept()
+
+
+def test_coarse_corridors_are_a_subset_and_two_way_share_moves(grid):
+    D, table = grid
+    full = feasibility.corridors(D, table)
+    coarse = feasibility.corridors(D, table, split_highways={"motorway", "trunk", "primary"},
+                                   classes={"primary", "secondary"}, min_length_m=300.0)
+    assert 0 < len(coarse) < len(full)
+    assert [c.cid for c in coarse] == list(range(len(coarse)))
+    for c in coarse:
+        assert feasibility.corridor_length_m(table, c) >= 300.0
+        assert all(table[sid].highway in {"primary", "secondary"} for sid in c.segments)
+    base = feasibility.baseline_config(table)
+    share = feasibility.two_way_share(table, base)
+    one_way = next(c for c in coarse if any(table[sid].state != "two" for sid in c.segments))
+    part, blocked = one_way.config_for(table, "two")
+    assert not blocked and feasibility.two_way_share(table, {**base, **part}) > share

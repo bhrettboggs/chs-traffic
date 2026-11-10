@@ -16,6 +16,7 @@ Charleston has spent 30 years converting peninsula one-way pairs back to two-way
 06_build_zones.py   Census LODES jobs and workers by block ──► 90 zones, connectors, internal commutes
 04_calibrate.py     model flows vs 37 SCDOT count stations (GEH); 07_tune.py tries demand knobs on half of them
 08_backtest_...py   Spring/Cannon before vs after the 2017 two-way conversion (plausibility check)
+09_search.py        greedy search over 46 corridors, two-stage evaluation, resumable
 demand              SCDOT AADT at the gateways + LODES zones ──► peak-hour origin-destination matrix
 (next) assignment   Frank-Wolfe user equilibrium with BPR congestion ──► flow on every street
 (next) optimize     search over one-way/two-way configurations ──► lower total system travel time

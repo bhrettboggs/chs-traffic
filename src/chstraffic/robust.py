@@ -23,14 +23,17 @@ class Evaluation:
     tstt_h: np.ndarray            # one per scenario
     unreachable: np.ndarray
     max_gap: float
+    vkm: np.ndarray = None        # vehicle-km per scenario
 
 
 def evaluate(D_cfg: nx.DiGraph, ods: list[dict], gap: float = config.UE_GAP_SEARCH) -> Evaluation:
     net = Network(D_cfg)
     res = [user_equilibrium(net, od, tol=gap) for od in ods]
+    length_km = np.array([D_cfg.edges[e]["length_m"] for e in net.edges]) / 1000.0
     return Evaluation(np.array([r.total_system_time_h for r in res]),
                       np.array([r.unreachable_demand for r in res]),
-                      max(r.relative_gap for r in res))
+                      max(r.relative_gap for r in res),
+                      np.array([float(r.flow @ length_km) for r in res]))
 
 
 @dataclass

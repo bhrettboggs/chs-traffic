@@ -1,0 +1,13 @@
+# SCDOT estimated AADT on Spring St and Cannon St around the two-way conversion (late 2017), for the back-test
+# (scripts/08_backtest_spring_cannon.py). Read 2026-11-09 from the SCDOT county PDFs
+# https://www.scdot.org/content/dam/scdot-legacy/travel/pdf/trafficcounts/<year>/CHARLESTON.pdf (copies of 2016, 2018, 2019 in
+# data/raw/scdot_history/, 2025 in data/raw/). "Est. AADT" is factored from short counts and is not recounted every year.
+station,street,year,aadt
+419,Spring Street,2016,6700
+419,Spring Street,2018,6200
+419,Spring Street,2019,5000
+419,Spring Street,2025,5600
+417,Cannon Street,2016,5700
+417,Cannon Street,2018,5800
+417,Cannon Street,2019,6100
+417,Cannon Street,2025,5700

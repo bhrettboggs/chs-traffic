@@ -206,11 +206,18 @@ class Corridor:
         return cfg, blocked
 
 
-def corridors(D: nx.DiGraph, table: dict) -> list[Corridor]:
-    """Group same-named, connected, non-frozen segments; split at major cross streets."""
+def corridors(D: nx.DiGraph, table: dict, split_highways: set | None = None,
+              classes: set | None = None, min_length_m: float = 0.0) -> list[Corridor]:
+    """Group same-named, connected, non-frozen segments; split at major cross streets.
+
+    split_highways: classes of cross street that break a corridor (default config.MAJOR_HIGHWAYS).
+    classes: keep only corridors whose longest highway class (by length) is in this set.
+    min_length_m: drop shorter corridors. Dropped corridors simply stay as they are today.
+    """
+    split_highways = config.MAJOR_HIGHWAYS if split_highways is None else split_highways
     major_nodes: dict = {}
     for s in table.values():
-        if s.highway in config.MAJOR_HIGHWAYS:
+        if s.highway in split_highways:
             for n in (s.a, s.b):
                 major_nodes.setdefault(n, set()).add(s.name)
 
@@ -233,6 +240,11 @@ def corridors(D: nx.DiGraph, table: dict) -> list[Corridor]:
     out = []
     for k, comp in enumerate(sorted(nx.connected_components(H), key=lambda c: sorted(map(str, c)))):
         comp = list(comp)
+        by_class: dict = {}
+        for sid in comp:
+            by_class[table[sid].highway] = by_class.get(table[sid].highway, 0.0) + table[sid].template["length_m"]
+        if sum(by_class.values()) < min_length_m or (classes is not None and max(by_class, key=by_class.get) not in classes):
+            continue
         pts = np.array([[D.nodes[n]["x"] * math.cos(math.radians(D.nodes[n]["y"])), D.nodes[n]["y"]]
                         for sid in comp for n in (table[sid].a, table[sid].b)])
         if len(pts) >= 2 and np.ptp(pts, axis=0).sum() > 0:
@@ -248,9 +260,30 @@ def corridors(D: nx.DiGraph, table: dict) -> list[Corridor]:
             vec = np.array([(D.nodes[s.b]["x"] - D.nodes[s.a]["x"]) * math.cos(math.radians(D.nodes[s.a]["y"])),
                             D.nodes[s.b]["y"] - D.nodes[s.a]["y"]])
             fwd[sid] = "ab" if float(vec @ ax) >= 0 else "ba"
-        out.append(Corridor(cid=k, name=table[comp[0]].name, segments=sorted(comp, key=lambda x: sorted(map(str, x))),
+        out.append(Corridor(cid=len(out), name=table[comp[0]].name, segments=sorted(comp, key=lambda x: sorted(map(str, x))),
                             axis=(float(ax[0]), float(ax[1])), fwd=fwd))
     return out
+
+
+def search_corridors(D: nx.DiGraph, table: dict) -> list[Corridor]:
+    """The coarse decision set used by the search (config.SEARCH_*)."""
+    return corridors(D, table, split_highways=config.SEARCH_SPLIT_HIGHWAYS, classes=config.SEARCH_CLASSES,
+                     min_length_m=config.SEARCH_MIN_LENGTH_M)
+
+
+def corridor_length_m(table: dict, c: Corridor) -> float:
+    return float(sum(table[sid].template["length_m"] for sid in c.segments))
+
+
+def two_way_share(table: dict, cfg: dict) -> float:
+    """Share of changeable street length (not frozen) that is two-way under cfg."""
+    tot = two = 0.0
+    for sid, s in table.items():
+        if s.frozen_reason:
+            continue
+        tot += s.template["length_m"]
+        two += s.template["length_m"] * (cfg.get(sid, s.state) == "two")
+    return two / tot if tot else 0.0
 
 
 # ---------------------------------------------------------------------------

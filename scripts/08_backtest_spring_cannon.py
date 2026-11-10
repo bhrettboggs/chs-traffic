@@ -11,7 +11,8 @@ one-way capacity bonus, --bonus).
 The question is not "what did the conversion do" (the model is not calibrated)
 but "does the model call a change the city made and kept a disaster". If it
 does, distrust the model. Reports the change in total system travel time and
-vehicle-km over demand scenarios, and the modeled volume on both streets.
+vehicle-km over demand scenarios, and the modeled volume on both streets next
+to SCDOT's counts from before and after (data/reference/spring_cannon_history.csv).
 Writes outputs/backtest_spring_cannon.csv.
 """
 
@@ -106,6 +107,12 @@ def main() -> None:
     out = pd.DataFrame(rows)
     print("\nmodeled two-way volume at the count station (vph, median over scenarios):")
     print(out.to_string(index=False))
+    hist = pd.read_csv(ROOT / "data" / "reference" / "spring_cannon_history.csv", comment="#")
+    piv = hist.pivot(index="street", columns="year", values="aadt")
+    piv["2016_to_2018"] = (piv[2018] / piv[2016] - 1).map("{:+.0%}".format)
+    piv["2016_to_2019"] = (piv[2019] / piv[2016] - 1).map("{:+.0%}".format)
+    print("\nobserved SCDOT AADT (conversion: late 2017):")
+    print(piv.to_string())
     (ROOT / "outputs").mkdir(exist_ok=True)
     pd.DataFrame(dict(scenario=range(args.scenarios), tstt_before_h=sb["tstt"], tstt_after_h=sa["tstt"],
                       vkm_before=sb["vkm"], vkm_after=sa["vkm"])).to_csv(
