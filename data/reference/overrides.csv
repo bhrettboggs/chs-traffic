@@ -13,7 +13,7 @@
 #   direction a one-way runs toward (N, S, E, W, NE, NW, SE, SW; each segment takes whichever of its two
 #   orientations points closer to it). Evidence for each direction row is in its source and note columns.
 name,osmid,total_lanes,frozen,direction,source,note
-Coming Street,38730522,2,,,city pavement 2024,COMING ST (SPRING ST - US HWY 17) 30 ft; OSM untagged. WEAK: width rule is ~62% reliable (HANDOFF 9); verify striping on site
+Coming Street,38730522,2,,,city pavement 2024,COMING ST (SPRING ST - US HWY 17) 30 ft; OSM untagged. Confirmed on site by B. Boggs 2026-11-11: one-way, 2 travel lanes, parking on the right side only
 Rutledge Avenue,391527983,2,,,city pavement 2024,RUTLEDGE AV (CAROLINA ST - CONGRESS ST) 35 ft; OSM untagged one-way
 Rutledge Avenue,78412406,2,,,city pavement 2024,RUTLEDGE AV (COURTLAND AV - RUTLEDGE AV) 33 ft; OSM untagged one-way
 Rutledge Avenue,143986208,2,,,city pavement 2024,RUTLEDGE AV (BEAUFAIN ST - CALHOUN ST) 31 ft; OSM lanes=1 but 2-lane neighbors

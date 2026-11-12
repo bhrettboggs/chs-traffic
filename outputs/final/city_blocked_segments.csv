@@ -1,0 +1,9 @@
+street,a,b,length_m,total_lanes,lanes_source,reason
+Rutledge Avenue,459166800,920224149,25,4,osm,divided road
+Rutledge Avenue,459166800,629565654,30,4,osm,divided road
+Rutledge Avenue,122782374,920224148,36,2,osm,divided road
+Rutledge Avenue,920224148,920224149,13,2,osm,divided road
+Ashley Avenue,459148246,98409726,42,2,osm,divided road
+Ashley Avenue,920224133,920224134,14,2,osm,divided road
+Ashley Avenue,920224134,98409726,16,2,osm,divided road
+Ashley Avenue,10053543195,920224133,9,3,osm,divided road

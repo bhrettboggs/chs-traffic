@@ -10,6 +10,8 @@ data/processed/*
 !data/processed/.gitkeep
 outputs/*
 !outputs/.gitkeep
+# frozen final results (Task 3) are committed
+!outputs/final/
 # OSM downloads are reproducible from scripts/01_fetch_osm.py; uncomment to stop committing them
 # data/raw/*.graphml
 # data/raw/*.osm

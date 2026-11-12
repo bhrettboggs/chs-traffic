@@ -22,8 +22,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from chstraffic import config, demand, feasibility, widths, robust  # noqa: E402
-
-STREETS = ["Coming Street", "Rutledge Avenue", "Ashley Avenue"]
+from chstraffic.variants import city_variants  # noqa: E402
 
 
 def main() -> None:
@@ -54,19 +53,9 @@ def main() -> None:
     print(f"baseline TSTT median {pd.Series(base_ev.tstt_h).median():,.1f} veh-h "
           f"(max gap {base_ev.max_gap:.1e}, unreachable {base_ev.unreachable.max():.0f} vph)")
 
-    rows, blocked_rows = [], []
-    variants = {s: [s] for s in STREETS}
-    variants["all three"] = STREETS
-    for label, streets in variants.items():
-        cfg, n_conv = dict(base_cfg), 0
-        for sid, s in table.items():
-            if s.name in streets and s.state != "two":
-                if "two" in s.allowed:
-                    cfg[sid], n_conv = "two", n_conv + 1
-                elif label != "all three":
-                    blocked_rows.append(dict(street=s.name, a=s.a, b=s.b,
-                                             length_m=round(s.template["length_m"]), total_lanes=s.total_lanes,
-                                             lanes_source=s.lanes_source, reason=s.frozen_reason or "1 lane"))
+    rows = []
+    variants, blocked_rows = city_variants(table, base_cfg)
+    for label, (cfg, n_conv) in variants.items():
         N = feasibility.apply_config(D, table, cfg)
         scr = feasibility.screen(B, N, pairs)
         if not scr.ok:

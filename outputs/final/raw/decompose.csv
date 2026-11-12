@@ -1,0 +1,241 @@
+config,peak,scale,bonus,scenario,tstt_h,vkm,unreachable,iterations,max_gap,demand,layout
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,0,1873.3732144800356,100205.8920313442,0.0,23,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,1,1896.966897852942,102081.85432620911,0.0,23,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,2,1890.4794097648712,102678.09792771998,0.0,31,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,3,1816.003076604312,97223.32451521706,0.0,21,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,4,1997.1998924546854,107031.46849640884,0.0,24,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,5,1939.039773738648,104022.9459848381,0.0,23,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,6,1634.6929232329321,89138.73640889756,0.0,17,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,7,1721.794171105197,93101.88997977732,0.0,23,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,8,1975.7869212472126,105012.751173259,0.0,29,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,9,1907.5580691554467,102223.68081651116,0.0,25,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,10,1811.8681957403599,97322.21594588974,0.0,33,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,11,1872.3196333657008,100817.33451457955,0.0,34,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,12,1936.0129918075713,103849.98027812564,0.0,29,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,13,1782.8623203468044,97034.72426913914,0.0,24,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,14,1807.0373790185868,96790.53164428505,0.0,35,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,15,1978.5986308312122,106508.69529190831,0.0,24,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,16,2021.3756702513413,107783.26254567664,0.0,31,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,17,1875.6667942083973,100163.92597349077,0.0,36,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,18,1788.2092096064773,96078.5446003185,0.0,31,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"today | old: K .09, split .60, no non-work",am,1.0,1.1,19,1877.9626497954246,101729.88203787217,0.0,23,9.97809861396254e-05,"old: K .09, split .60, no non-work",today
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,0,1869.3199996880753,100079.81008690299,0.0,35,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,1,1892.3728089610302,101915.72800332055,0.0,30,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,2,1886.190136664784,102528.01688772056,0.0,17,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,3,1811.088388848438,97069.14244349282,0.0,19,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,4,1993.5246803577545,106909.02800595925,0.0,26,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,5,1934.2566666927787,103885.99310242017,0.0,25,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,6,1631.430933873714,89077.48729773446,0.0,16,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,7,1718.9028443486727,93010.43756213323,0.0,21,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,8,1970.5015185950797,104860.94586324628,0.0,34,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,9,1903.2434594214756,102132.74936649865,0.0,31,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,10,1807.9205669915486,97117.28296841368,0.0,24,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,11,1868.708471476874,100701.33769816616,0.0,24,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,12,1931.1514968794604,103601.95634459941,0.0,27,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,13,1778.6208677384097,96914.74341212322,0.0,25,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,14,1802.747728055198,96649.19101446318,0.0,31,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,15,1973.3055932546006,106310.65705567587,0.0,28,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,16,2017.237583361896,107651.83743373158,0.0,34,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,17,1872.174116535111,100019.39341375673,0.0,27,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,18,1784.3543657138662,95923.52673014776,0.0,31,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Coming Street | old: K .09, split .60, no non-work",am,1.0,1.1,19,1873.3789939857336,101583.00117448079,0.0,25,9.972955406085222e-05,"old: K .09, split .60, no non-work",Coming Street
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,0,1883.419617331786,100092.91121109061,0.0,38,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,1,1907.1007031900149,101983.66861913184,0.0,28,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,2,1894.333521991101,102561.17831360888,0.0,25,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,3,1824.24090356496,97116.48685312878,0.0,25,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,4,2002.0064814242712,106937.49574748811,0.0,29,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,5,1953.3082542149275,103975.34496589209,0.0,29,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,6,1650.1135526090447,89148.14610421864,0.0,30,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,7,1731.5204132493934,93026.92453753077,0.0,23,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,8,1994.5420072396118,104928.20219111121,0.0,31,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,9,1926.9048813759916,102138.71231103435,0.0,39,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,10,1814.3894133009485,97231.16254442009,0.0,32,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,11,1878.9570220655949,100717.88579524978,0.0,29,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,12,1942.2272642262972,103732.5304729049,0.0,35,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,13,1787.09758527864,96927.37208682616,0.0,21,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,14,1818.6507492894527,96690.25343021816,0.0,26,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,15,1983.462985788312,106353.8565344333,0.0,31,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,16,2030.091258435047,107660.26722207168,0.0,36,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,17,1882.2280102429088,100043.20426915133,0.0,30,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,18,1791.6599324467643,95995.87233457543,0.0,26,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Rutledge Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,19,1883.5073394320025,101588.77499353465,0.0,26,9.932946689431517e-05,"old: K .09, split .60, no non-work",Rutledge Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,0,1867.2541814946946,100114.98015539275,0.0,27,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,1,1893.1027352873527,102010.80703082791,0.0,32,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,2,1888.6088115596237,102637.25375319086,0.0,27,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,3,1809.8365707427752,97135.39847523792,0.0,25,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,4,1994.4697414751627,106970.88198835388,0.0,29,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,5,1932.4288416795819,103957.89629809995,0.0,33,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,6,1625.194677754225,89037.47562510587,0.0,28,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,7,1715.7912427519332,93006.24517242119,0.0,21,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,8,1967.0996278567977,104897.14290921466,0.0,22,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,9,1899.1487671318907,102114.89995205576,0.0,22,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,10,1810.9581815402505,97286.80589132922,0.0,32,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,11,1867.6222416708758,100742.18846442422,0.0,19,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,12,1932.979727572508,103777.41486929271,0.0,27,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,13,1781.987058939224,96980.21156959391,0.0,18,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,14,1801.829849376296,96729.38781231783,0.0,28,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,15,1977.2538793538317,106464.9847156361,0.0,27,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,16,2018.0053080644034,107709.0743726643,0.0,28,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,17,1873.7054291666718,100114.10473113606,0.0,25,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,18,1785.8050257833168,95997.8446835168,0.0,28,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"Ashley Avenue | old: K .09, split .60, no non-work",am,1.0,1.1,19,1875.9258561087486,101671.69458038404,0.0,22,9.992406739406559e-05,"old: K .09, split .60, no non-work",Ashley Avenue
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,0,1867.937135805946,99906.04043279504,0.0,36,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,1,1892.7206163538394,101774.68227235231,0.0,38,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,2,1885.902059163028,102405.64071598875,0.0,17,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,3,1809.2883285511884,96895.77063554851,0.0,30,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,4,1993.01637539311,106770.94010977443,0.0,32,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,5,1934.2043756188516,103716.531868141,0.0,28,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,6,1630.0033319789181,88918.80769982077,0.0,34,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,7,1716.8733168301676,92870.00132438948,0.0,33,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,8,1971.7799594879348,104599.63305067898,0.0,35,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,9,1905.364212219789,101909.40435279414,0.0,31,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,10,1807.593794983841,97022.99499814994,0.0,27,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,11,1867.53027031906,100539.48623492969,0.0,32,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,12,1930.7829901649952,103457.17661612354,0.0,31,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,13,1779.3111564490516,96810.23412235318,0.0,20,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,14,1803.384530098776,96488.04510973477,0.0,27,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,15,1974.198494911791,106173.6417189105,0.0,26,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,16,2017.656146417246,107488.74823771331,0.0,33,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,17,1872.6548832341389,99897.71688571757,0.0,24,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,18,1782.9516506061866,95796.72776583492,0.0,27,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"all three | old: K .09, split .60, no non-work",am,1.0,1.1,19,1874.1017517491255,101417.4005393957,0.0,26,9.961238671240542e-05,"old: K .09, split .60, no non-work",all three
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,0,1867.257210213368,100115.05010834482,0.0,27,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,1,1893.3792330802992,102014.62733227966,0.0,30,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,2,1888.6068366957782,102637.26776435881,0.0,27,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,3,1809.8361402937605,97135.41713205553,0.0,25,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,4,1994.4705243205071,106970.91609821694,0.0,29,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,5,1932.29267850786,103957.85552720293,0.0,29,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,6,1625.195114582344,89037.43167633952,0.0,28,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,7,1715.8027140136319,93009.75673527594,0.0,21,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,8,1967.0744325872943,104897.51390174808,0.0,22,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,9,1899.1443997375368,102114.6098140523,0.0,22,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,10,1810.9565733754455,97286.81232725801,0.0,32,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,11,1867.6723931163915,100739.65689193884,0.0,24,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,12,1932.9788966901078,103777.34908830418,0.0,27,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,13,1781.9866925167078,96980.22101957691,0.0,18,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,14,1801.8291288742178,96729.64042676105,0.0,28,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,15,1977.2534677963101,106464.99416842252,0.0,27,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,16,2018.3654435713693,107710.00012079938,0.0,41,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,17,1873.7130991020965,100113.68565572846,0.0,24,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,18,1785.6157041833064,96007.57027742207,0.0,27,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | old: K .09, split .60, no non-work",am,1.0,1.1,19,1875.9470938803556,101673.5408913463,0.0,21,9.916852674913175e-05,"old: K .09, split .60, no non-work",Ashley Calhoun-Crosstown
+"today | measured K and split, no non-work",am,1.0,1.1,0,1580.1374425866031,85424.90450258908,0.0,22,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,1,1600.1036151964013,87044.69138239845,0.0,21,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,2,1563.1938886179073,86085.38181880394,0.0,15,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,3,1537.3494358617477,82946.20642389773,0.0,17,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,4,1657.8697144569915,90109.45805480244,0.0,17,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,5,1626.03754939318,88429.04277188194,0.0,15,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,6,1369.1685628332684,75383.5567635803,0.0,16,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,7,1443.635818149838,78793.87723944048,0.0,13,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,8,1668.319048960086,89757.32555746558,0.0,19,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,9,1595.7335672425659,86731.51315880689,0.0,20,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,10,1525.7096311864364,82693.17677112298,0.0,18,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,11,1552.0978266002576,84681.62255620846,0.0,16,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,12,1624.07783945926,88171.21366534877,0.0,23,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,13,1489.8641479505538,81814.42279154916,0.0,15,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,14,1519.1224500130406,82278.40872504128,0.0,17,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,15,1658.65012960255,90319.21379107672,0.0,19,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,16,1675.7365472086337,90786.25498602519,0.0,16,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,17,1580.6462914326062,85105.34524407252,0.0,30,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,18,1486.823449351639,80597.14877617861,0.0,13,9.805793073277546e-05,"measured K and split, no non-work",today
+"today | measured K and split, no non-work",am,1.0,1.1,19,1574.6339393728128,86176.22022787546,0.0,13,9.805793073277546e-05,"measured K and split, no non-work",today
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,0,1577.4646147565818,85390.6535987815,0.0,17,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,1,1596.7387675559835,86965.98621513815,0.0,13,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,2,1560.0397911773707,86034.14521862367,0.0,8,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,3,1534.0115357316715,82876.85899479351,0.0,14,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,4,1655.2455681077865,90056.86371224,0.0,23,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,5,1622.4308193195718,88376.69160555965,0.0,14,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,6,1366.6974593087589,75366.792371609,0.0,12,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,7,1441.60142245546,78770.4155586528,0.0,15,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,8,1665.8587697835378,89677.09934287082,0.0,32,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,9,1593.6177142135034,86706.16073000309,0.0,15,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,10,1522.7160967474492,82598.20186170367,0.0,18,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,11,1549.4479963846184,84621.19359720602,0.0,17,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,12,1620.7125541360185,88056.87757394547,0.0,15,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,13,1487.0310886896414,81782.71934619057,0.0,19,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,14,1516.9762922880523,82216.28210177107,0.0,12,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,15,1655.3020964269494,90189.45009174857,0.0,14,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,16,1672.634424673309,90748.11455574083,0.0,19,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,17,1578.6124133093706,85051.10591116859,0.0,18,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,18,1483.672048534499,80531.09298509956,0.0,15,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Coming Street | measured K and split, no non-work",am,1.0,1.1,19,1571.8125109725822,86115.60917762962,0.0,13,9.659504106256128e-05,"measured K and split, no non-work",Coming Street
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,0,1583.7859953453953,85349.14803549896,0.0,21,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,1,1603.8266011562603,86976.51678785896,0.0,17,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,2,1563.3118539752058,86016.137282891,0.0,15,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,3,1540.5376363909102,82865.23887393929,0.0,15,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,4,1659.39812335875,90062.92739066092,0.0,20,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,5,1632.6029699691935,88364.27365382457,0.0,20,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,6,1375.5308625603438,75289.25363466115,0.0,17,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,7,1447.6603352459927,78699.31120928538,0.0,13,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,8,1675.519812778284,89687.08235896105,0.0,21,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,9,1603.1546777930046,86642.18580208809,0.0,15,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,10,1525.3989475286694,82639.6827168771,0.0,24,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,11,1554.513165302405,84595.78920677413,0.0,20,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,12,1626.506841437,88096.01895271863,0.0,22,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,13,1490.3082896752678,81759.76554643062,0.0,17,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,14,1523.0963538870715,82195.13533030562,0.0,15,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,15,1659.7165205560311,90238.62475210168,0.0,19,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,16,1679.015626511265,90709.03569521531,0.0,15,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,17,1582.9164170939566,85042.1354407939,0.0,20,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,18,1488.3540130618517,80516.69918553744,0.0,14,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Rutledge Avenue | measured K and split, no non-work",am,1.0,1.1,19,1576.4880359574715,86113.30401893325,0.0,20,9.978679570352424e-05,"measured K and split, no non-work",Rutledge Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,0,1578.2411257894282,85369.41260349171,0.0,22,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,1,1598.9160430853603,87005.0905398182,0.0,23,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,2,1562.5542866193275,86052.7420929466,0.0,15,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,3,1535.618108541994,82900.2450030871,0.0,15,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,4,1657.1735565220135,90069.22132443472,0.0,19,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,5,1624.244779412327,88381.3082405115,0.0,16,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,6,1365.788279764491,75323.2253720123,0.0,15,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,7,1441.8392147330876,78737.50802758422,0.0,13,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,8,1664.762185829582,89707.05261664695,0.0,18,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,9,1592.669986953542,86674.75872115958,0.0,16,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,10,1525.2037922535603,82675.77379098901,0.0,18,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,11,1550.714611267761,84624.44048934543,0.0,17,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,12,1623.0745400799453,88128.56556547541,0.0,23,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,13,1489.3320245619755,81794.85493548584,0.0,14,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,14,1517.92413059076,82230.44270818125,0.0,17,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,15,1658.1920918844355,90295.32646553787,0.0,19,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,16,1674.79621879079,90738.69453180989,0.0,16,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,17,1579.840962096946,85065.6070631783,0.0,26,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,18,1485.8481223950246,80550.67719690547,0.0,13,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"Ashley Avenue | measured K and split, no non-work",am,1.0,1.1,19,1573.7965869735226,86140.55196470898,0.0,13,9.811764720375715e-05,"measured K and split, no non-work",Ashley Avenue
+"all three | measured K and split, no non-work",am,1.0,1.1,0,1577.2643992614824,85296.60027906907,0.0,16,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,1,1597.3329517686407,86893.03066992346,0.0,30,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,2,1558.514423097341,85941.068014881,0.0,8,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,3,1533.6987704500568,82771.95632169407,0.0,16,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,4,1654.6856209960713,89957.47632942518,0.0,21,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,5,1623.370093609845,88268.32037619026,0.0,19,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,6,1366.6358572981171,75233.68339297383,0.0,22,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,7,1441.5051994919363,78649.7857486604,0.0,15,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,8,1665.4375448095695,89574.80827520778,0.0,20,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,9,1593.9214968488939,86564.62272704134,0.0,21,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,10,1521.8018167899636,82548.87501976096,0.0,30,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,11,1549.04301670126,84498.13311444464,0.0,26,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,12,1620.2820971132912,87962.49749872269,0.0,17,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,13,1486.4567272522202,81701.42503472099,0.0,14,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,14,1516.9866866923849,82135.48165778475,0.0,15,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,15,1654.9700573134285,90146.89821574633,0.0,14,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,16,1672.665957854177,90650.74678348805,0.0,24,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,17,1578.492350968056,85003.34543880145,0.0,18,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,18,1482.5711605977958,80427.91752632435,0.0,14,9.853475189910124e-05,"measured K and split, no non-work",all three
+"all three | measured K and split, no non-work",am,1.0,1.1,19,1571.1554909294368,86057.00688738843,0.0,27,9.853475189910124e-05,"measured K and split, no non-work",all three
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,0,1578.241215945749,85369.42746498909,0.0,22,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,1,1598.916024069281,87005.10008668092,0.0,23,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,2,1562.5444588025473,86052.70522885265,0.0,14,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,3,1535.6181899259948,82900.25927479088,0.0,15,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,4,1657.175183832807,90069.25333642674,0.0,19,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,5,1624.2446791482525,88381.31918864223,0.0,16,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,6,1365.7884800033198,75323.23502027322,0.0,15,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,7,1441.839140222539,78737.51791307417,0.0,13,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,8,1664.7675231252601,89707.5632104618,0.0,18,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,9,1592.673357277936,86675.04164808826,0.0,16,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,10,1525.2034682114001,82675.7802342693,0.0,18,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,11,1550.7140385661714,84624.44745612002,0.0,17,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,12,1623.0744255428585,88128.57798812601,0.0,23,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,13,1489.332036827835,81794.86284631037,0.0,14,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,14,1517.9265448827744,82230.48196320864,0.0,17,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,15,1658.1920032559321,90295.25788790826,0.0,19,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,16,1674.7979457536574,90738.71695429068,0.0,16,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,17,1579.8421124977106,85065.63548257598,0.0,26,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,18,1485.8480647868373,80550.68338046176,0.0,13,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown
+"Ashley Calhoun-Crosstown | measured K and split, no non-work",am,1.0,1.1,19,1573.7965356673308,86140.55882014932,0.0,13,9.81535017120966e-05,"measured K and split, no non-work",Ashley Calhoun-Crosstown

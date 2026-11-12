@@ -1,0 +1,953 @@
+{
+ "accepted": [],
+ "round": 1,
+ "screen": {
+  "1|0|two": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 994,
+   "d_tstt": 0.0015223448952297325,
+   "win": 0.0,
+   "d_vkm": -0.0002235539736812712,
+   "d_two_way_share": 0.0057185549143577985
+  },
+  "1|0|fwd": {
+   "status": "same"
+  },
+  "1|0|rev": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|1|two": {
+   "status": "ok",
+   "name": "Spring Street",
+   "length_m": 1094,
+   "d_tstt": 0.0002983601109637357,
+   "win": 0.3333333333333333,
+   "d_vkm": -0.00023120869340953476,
+   "d_two_way_share": 0.0003304865323060513
+  },
+  "1|1|fwd": {
+   "status": "ok",
+   "name": "Spring Street",
+   "length_m": 1094,
+   "d_tstt": 0.0021971085232700784,
+   "win": 0.0,
+   "d_vkm": 0.0010440294557580998,
+   "d_two_way_share": -0.00596648361351837
+  },
+  "1|1|rev": {
+   "status": "ok",
+   "name": "Spring Street",
+   "length_m": 1094,
+   "d_tstt": 0.0009823742304410448,
+   "win": 0.0,
+   "d_vkm": 0.0005884379055748715,
+   "d_two_way_share": -0.00596648361351837
+  },
+  "1|2|two": {
+   "status": "ok",
+   "name": "Coming Street",
+   "length_m": 1280,
+   "d_tstt": 0.0010714034899906484,
+   "win": 0.0,
+   "d_vkm": -0.00011507360947819271,
+   "d_two_way_share": 0.007364773559438764
+  },
+  "1|2|fwd": {
+   "status": "same"
+  },
+  "1|2|rev": {
+   "status": "ok",
+   "name": "Coming Street",
+   "length_m": 1280,
+   "d_tstt": 0.005364681017495358,
+   "win": 0.0,
+   "d_vkm": -0.00032623168521761503,
+   "d_two_way_share": 0.0
+  },
+  "1|3|two": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 2507,
+   "d_tstt": -0.00022921321042927248,
+   "win": 0.6666666666666666,
+   "d_vkm": -0.00016852901856486321,
+   "d_two_way_share": 0.002609437431377537
+  },
+  "1|3|fwd": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 2507,
+   "d_tstt": 0.005077189821330948,
+   "win": 0.0,
+   "d_vkm": 0.0020400349963879036,
+   "d_two_way_share": -0.01181793687500432
+  },
+  "1|3|rev": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 2507,
+   "d_tstt": 0.001311144340376084,
+   "win": 0.0,
+   "d_vkm": 0.0008861363108197592,
+   "d_two_way_share": -0.01181793687500432
+  },
+  "1|4|two": {
+   "status": "same"
+  },
+  "1|4|fwd": {
+   "status": "ok",
+   "name": "Hagood Avenue",
+   "length_m": 1095,
+   "d_tstt": 0.003960861421923978,
+   "win": 0.0,
+   "d_vkm": 0.00198210720117357,
+   "d_two_way_share": -0.006300981793151084
+  },
+  "1|4|rev": {
+   "status": "ok",
+   "name": "Hagood Avenue",
+   "length_m": 1095,
+   "d_tstt": 0.002526680420506633,
+   "win": 0.0,
+   "d_vkm": 0.001211021315012643,
+   "d_two_way_share": -0.006300981793151084
+  },
+  "1|5|two": {
+   "status": "same"
+  },
+  "1|5|fwd": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|5|rev": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|6|two": {
+   "status": "same"
+  },
+  "1|6|fwd": {
+   "status": "ok",
+   "name": "Huger Street",
+   "length_m": 1069,
+   "d_tstt": 0.0005257091203324146,
+   "win": 0.0,
+   "d_vkm": 2.348923128932719e-05,
+   "d_two_way_share": -0.006150810849327115
+  },
+  "1|6|rev": {
+   "status": "ok",
+   "name": "Huger Street",
+   "length_m": 1069,
+   "d_tstt": 0.0006252917319435891,
+   "win": 0.0,
+   "d_vkm": 0.0002151817479891053,
+   "d_two_way_share": -0.006150810849327115
+  },
+  "1|7|two": {
+   "status": "ok",
+   "name": "Calhoun Street",
+   "length_m": 1471,
+   "d_tstt": 0.005652377442239158,
+   "win": 0.0,
+   "d_vkm": 0.0016819929406094076,
+   "d_two_way_share": 0.0005423752955178163
+  },
+  "1|7|fwd": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|7|rev": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|8|two": {
+   "status": "ok",
+   "name": "Coming Street",
+   "length_m": 567,
+   "d_tstt": 0.00024078264473481603,
+   "win": 0.0,
+   "d_vkm": -0.00013375490810544713,
+   "d_two_way_share": 0.0032638297795678506
+  },
+  "1|8|fwd": {
+   "status": "same"
+  },
+  "1|8|rev": {
+   "status": "ok",
+   "name": "Coming Street",
+   "length_m": 567,
+   "d_tstt": 0.0022996791575236783,
+   "win": 0.0,
+   "d_vkm": 0.00015224917304560806,
+   "d_two_way_share": 0.0
+  },
+  "1|9|two": {
+   "status": "blocked"
+  },
+  "1|9|fwd": {
+   "status": "ok",
+   "name": "King Street",
+   "length_m": 1895,
+   "d_tstt": -0.00032280089659701233,
+   "win": 1.0,
+   "d_vkm": -0.00031971364542238145,
+   "d_two_way_share": -0.0006847334655454285
+  },
+  "1|9|rev": {
+   "status": "ok",
+   "name": "King Street",
+   "length_m": 1895,
+   "d_tstt": -5.449970760721771e-06,
+   "win": 0.6666666666666666,
+   "d_vkm": 1.1250269138137389e-05,
+   "d_two_way_share": -0.0006847334655454285
+  },
+  "1|10|two": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 1219,
+   "d_tstt": 9.482217813986764e-05,
+   "win": 0.3333333333333333,
+   "d_vkm": -9.855098384177936e-05,
+   "d_two_way_share": 0.0015895493736939326
+  },
+  "1|10|fwd": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 1219,
+   "d_tstt": 0.0006442518608317608,
+   "win": 0.0,
+   "d_vkm": 0.00029461136652075837,
+   "d_two_way_share": -0.0054278562826243215
+  },
+  "1|10|rev": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 1219,
+   "d_tstt": 0.0002987079353874063,
+   "win": 0.0,
+   "d_vkm": 4.919064557662445e-05,
+   "d_two_way_share": -0.0054278562826243215
+  },
+  "1|11|two": {
+   "status": "same"
+  },
+  "1|11|fwd": {
+   "status": "ok",
+   "name": "Beaufain Street",
+   "length_m": 1318,
+   "d_tstt": 0.0020752501889425012,
+   "win": 0.0,
+   "d_vkm": 0.0009988621341758819,
+   "d_two_way_share": -0.007584836457674937
+  },
+  "1|11|rev": {
+   "status": "ok",
+   "name": "Beaufain Street",
+   "length_m": 1318,
+   "d_tstt": 0.0011472174785233473,
+   "win": 0.0,
+   "d_vkm": 0.0005908489155591242,
+   "d_two_way_share": -0.007584836457674937
+  },
+  "1|12|two": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 1090,
+   "d_tstt": 0.0032071509053730463,
+   "win": 0.0,
+   "d_vkm": -0.0007203729107609913,
+   "d_two_way_share": 0.006271978257420763
+  },
+  "1|12|fwd": {
+   "status": "ok",
+   "name": "Rutledge Avenue",
+   "length_m": 1090,
+   "d_tstt": 0.010447502738538228,
+   "win": 0.0,
+   "d_vkm": 0.0038174580703393968,
+   "d_two_way_share": 0.0
+  },
+  "1|12|rev": {
+   "status": "same"
+  },
+  "1|13|two": {
+   "status": "blocked"
+  },
+  "1|13|fwd": {
+   "status": "ok",
+   "name": "Cannon Street",
+   "length_m": 1234,
+   "d_tstt": 0.0005529339943142938,
+   "win": 0.3333333333333333,
+   "d_vkm": 0.00029875784793971977,
+   "d_two_way_share": -0.00609217339781043
+  },
+  "1|13|rev": {
+   "status": "ok",
+   "name": "Cannon Street",
+   "length_m": 1234,
+   "d_tstt": 0.0017514237187722752,
+   "win": 0.0,
+   "d_vkm": 0.001021944547180779,
+   "d_two_way_share": -0.00609217339781043
+  },
+  "1|14|two": {
+   "status": "ok",
+   "name": "Morrison Drive",
+   "length_m": 2490,
+   "d_tstt": 0.000154768263505393,
+   "win": 0.3333333333333333,
+   "d_vkm": 9.526373870468359e-05,
+   "d_two_way_share": 0.005114459308033226
+  },
+  "1|14|fwd": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|14|rev": {
+   "status": "ok",
+   "name": "Morrison Drive",
+   "length_m": 2490,
+   "d_tstt": 0.0026246129794509354,
+   "win": 0.0,
+   "d_vkm": 0.0013446653254165497,
+   "d_two_way_share": -0.009216118116527117
+  },
+  "1|15|two": {
+   "status": "same"
+  },
+  "1|15|fwd": {
+   "status": "ok",
+   "name": "King Street",
+   "length_m": 4706,
+   "d_tstt": 0.019704843725072346,
+   "win": 0.0,
+   "d_vkm": 0.008209806806728151,
+   "d_two_way_share": -0.027088642320512224
+  },
+  "1|15|rev": {
+   "status": "ok",
+   "name": "King Street",
+   "length_m": 4706,
+   "d_tstt": 0.015780507377645803,
+   "win": 0.0,
+   "d_vkm": 0.008988530427310884,
+   "d_two_way_share": -0.027088642320512224
+  },
+  "1|16|two": {
+   "status": "same"
+  },
+  "1|16|fwd": {
+   "status": "ok",
+   "name": "Meeting Street",
+   "length_m": 1238,
+   "d_tstt": 0.006919997207241346,
+   "win": 0.0,
+   "d_vkm": 0.002151597854074705,
+   "d_two_way_share": -0.007126104245334108
+  },
+  "1|16|rev": {
+   "status": "ok",
+   "name": "Meeting Street",
+   "length_m": 1238,
+   "d_tstt": 0.0031219142395699042,
+   "win": 0.0,
+   "d_vkm": 0.0023292722380186723,
+   "d_two_way_share": -0.007126104245334108
+  },
+  "1|17|two": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 1180,
+   "d_tstt": -2.8623545172227574e-06,
+   "win": 1.0,
+   "d_vkm": -2.592779348960702e-06,
+   "d_two_way_share": 0.0012811058320854052
+  },
+  "1|17|fwd": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 1180,
+   "d_tstt": 3.1235641173503005e-05,
+   "win": 0.0,
+   "d_vkm": 4.048348030005755e-05,
+   "d_two_way_share": -0.0055106512008760156
+  },
+  "1|17|rev": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 1180,
+   "d_tstt": 0.0003479446082039021,
+   "win": 0.0,
+   "d_vkm": 0.00010274023989305843,
+   "d_two_way_share": -0.0055106512008760156
+  },
+  "1|18|two": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 870,
+   "d_tstt": 0.0006788691942140416,
+   "win": 0.0,
+   "d_vkm": 0.00014336137712008443,
+   "d_two_way_share": 0.00482463244230269
+  },
+  "1|18|fwd": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 870,
+   "d_tstt": 3.739856646589601e-09,
+   "win": 0.3333333333333333,
+   "d_vkm": -2.9688261478829267e-09,
+   "d_two_way_share": -0.00018457384468162363
+  },
+  "1|18|rev": {
+   "status": "ok",
+   "name": "Ashley Avenue",
+   "length_m": 870,
+   "d_tstt": 0.00345912401345864,
+   "win": 0.0,
+   "d_vkm": 0.002734675571065622,
+   "d_two_way_share": -0.00018457384468162363
+  },
+  "1|19|two": {
+   "status": "blocked"
+  },
+  "1|19|fwd": {
+   "status": "ok",
+   "name": "Queen Street",
+   "length_m": 850,
+   "d_tstt": 0.00018768912347992087,
+   "win": 0.0,
+   "d_vkm": 3.904544569606946e-05,
+   "d_two_way_share": -0.00037280999780242574
+  },
+  "1|19|rev": {
+   "status": "ok",
+   "name": "Queen Street",
+   "length_m": 850,
+   "d_tstt": -1.5308869403152237e-05,
+   "win": 0.3333333333333333,
+   "d_vkm": -7.696261562791426e-06,
+   "d_two_way_share": -0.00037280999780242574
+  },
+  "1|20|two": {
+   "status": "same"
+  },
+  "1|20|fwd": {
+   "status": "ok",
+   "name": "Meeting Street",
+   "length_m": 1893,
+   "d_tstt": 0.0013767364643195723,
+   "win": 0.0,
+   "d_vkm": 0.0010787072452860258,
+   "d_two_way_share": -0.010895926433158731
+  },
+  "1|20|rev": {
+   "status": "ok",
+   "name": "Meeting Street",
+   "length_m": 1893,
+   "d_tstt": 0.003681408453550213,
+   "win": 0.0,
+   "d_vkm": 0.0021832750364815614,
+   "d_two_way_share": -0.010895926433158731
+  },
+  "1|21|two": {
+   "status": "blocked"
+  },
+  "1|21|fwd": {
+   "status": "same"
+  },
+  "1|21|rev": {
+   "status": "ok",
+   "name": "South Market Street",
+   "length_m": 535,
+   "d_tstt": 8.005224308760273e-05,
+   "win": 0.3333333333333333,
+   "d_vkm": 0.00015193401351365488,
+   "d_two_way_share": 0.0
+  },
+  "1|22|two": {
+   "status": "same"
+  },
+  "1|22|fwd": {
+   "status": "ok",
+   "name": "East Bay Street",
+   "length_m": 3102,
+   "d_tstt": 0.00199540718648931,
+   "win": 0.0,
+   "d_vkm": 0.0010677936539826849,
+   "d_two_way_share": -0.01785160006415465
+  },
+  "1|22|rev": {
+   "status": "ok",
+   "name": "East Bay Street",
+   "length_m": 3102,
+   "d_tstt": 0.0075590097347000285,
+   "win": 0.0,
+   "d_vkm": 0.006872985962580236,
+   "d_two_way_share": -0.01785160006415465
+  },
+  "1|23|two": {
+   "status": "same"
+  },
+  "1|23|fwd": {
+   "status": "ok",
+   "name": "Broad Street",
+   "length_m": 1583,
+   "d_tstt": 0.0008413873945678496,
+   "win": 0.0,
+   "d_vkm": 0.0002850917781665648,
+   "d_two_way_share": -0.009111910903664477
+  },
+  "1|23|rev": {
+   "status": "ok",
+   "name": "Broad Street",
+   "length_m": 1583,
+   "d_tstt": 0.0018730246574256704,
+   "win": 0.0,
+   "d_vkm": 0.0006973601053217315,
+   "d_two_way_share": -0.009111910903664477
+  },
+  "1|24|two": {
+   "status": "same"
+  },
+  "1|24|fwd": {
+   "status": "ok",
+   "name": "Calhoun Street",
+   "length_m": 503,
+   "d_tstt": 0.00036431173777192366,
+   "win": 0.0,
+   "d_vkm": 0.0002332411634355195,
+   "d_two_way_share": -0.0028956978618519535
+  },
+  "1|24|rev": {
+   "status": "ok",
+   "name": "Calhoun Street",
+   "length_m": 503,
+   "d_tstt": 0.0011677545504851228,
+   "win": 0.0,
+   "d_vkm": 0.0003365337048519823,
+   "d_two_way_share": -0.0028956978618519535
+  },
+  "1|25|two": {
+   "status": "ok",
+   "name": "Meeting Street",
+   "length_m": 3723,
+   "d_tstt": 0.00012329726720250456,
+   "win": 0.3333333333333333,
+   "d_vkm": -0.00011303576090089991,
+   "d_two_way_share": 0.005008139215458285
+  },
+  "1|25|fwd": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|25|rev": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|26|two": {
+   "status": "same"
+  },
+  "1|26|fwd": {
+   "status": "ok",
+   "name": "President Street",
+   "length_m": 411,
+   "d_tstt": 0.0007894513180551529,
+   "win": 0.0,
+   "d_vkm": 0.0005423756441013486,
+   "d_two_way_share": -0.002366463142404962
+  },
+  "1|26|rev": {
+   "status": "ok",
+   "name": "President Street",
+   "length_m": 411,
+   "d_tstt": 8.197765370276944e-05,
+   "win": 0.3333333333333333,
+   "d_vkm": 0.0001712147684392503,
+   "d_two_way_share": -0.002366463142404962
+  },
+  "1|27|two": {
+   "status": "same"
+  },
+  "1|27|fwd": {
+   "status": "ok",
+   "name": "Columbus Street",
+   "length_m": 611,
+   "d_tstt": 0.00025600759368079223,
+   "win": 0.3333333333333333,
+   "d_vkm": 0.0004076918375994036,
+   "d_two_way_share": -0.0035193904881263283
+  },
+  "1|27|rev": {
+   "status": "ok",
+   "name": "Columbus Street",
+   "length_m": 611,
+   "d_tstt": 0.0004056538179000313,
+   "win": 0.0,
+   "d_vkm": 0.0010110282728365376,
+   "d_two_way_share": -0.0035193904881263283
+  },
+  "1|28|two": {
+   "status": "same"
+  },
+  "1|28|fwd": {
+   "status": "ok",
+   "name": "President Street",
+   "length_m": 350,
+   "d_tstt": 0.0007321585113858239,
+   "win": 0.0,
+   "d_vkm": 0.0004073556738661832,
+   "d_two_way_share": -0.00201546480160375
+  },
+  "1|28|rev": {
+   "status": "ok",
+   "name": "President Street",
+   "length_m": 350,
+   "d_tstt": 0.0014594653732253882,
+   "win": 0.0,
+   "d_vkm": 0.00030719607291070555,
+   "d_two_way_share": -0.00201546480160375
+  },
+  "1|29|two": {
+   "status": "same"
+  },
+  "1|29|fwd": {
+   "status": "ok",
+   "name": "Bee Street",
+   "length_m": 951,
+   "d_tstt": 0.001408716376413525,
+   "win": 0.0,
+   "d_vkm": 0.0006909857531155842,
+   "d_two_way_share": -0.005472189459898247
+  },
+  "1|29|rev": {
+   "status": "ok",
+   "name": "Bee Street",
+   "length_m": 951,
+   "d_tstt": -9.048001960617243e-05,
+   "win": 0.6666666666666666,
+   "d_vkm": 8.831751081994632e-05,
+   "d_two_way_share": -0.005472189459898247
+  },
+  "1|30|two": {
+   "status": "ok",
+   "name": "Lockwood Drive",
+   "length_m": 2415,
+   "d_tstt": 0.004581080894716945,
+   "win": 0.0,
+   "d_vkm": -0.0005762561396703836,
+   "d_two_way_share": 0.009786924675642572
+  },
+  "1|30|fwd": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|30|rev": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|31|two": {
+   "status": "same"
+  },
+  "1|31|fwd": {
+   "status": "ok",
+   "name": "Concord Street",
+   "length_m": 319,
+   "d_tstt": 5.346731384303638e-07,
+   "win": 0.0,
+   "d_vkm": 2.1126922100656031e-07,
+   "d_two_way_share": -0.0018374282246780282
+  },
+  "1|31|rev": {
+   "status": "ok",
+   "name": "Concord Street",
+   "length_m": 319,
+   "d_tstt": -2.1199691279116806e-06,
+   "win": 0.3333333333333333,
+   "d_vkm": -3.0431968872979276e-05,
+   "d_two_way_share": -0.0018374282246780282
+  },
+  "1|32|two": {
+   "status": "blocked"
+  },
+  "1|32|fwd": {
+   "status": "ok",
+   "name": "North Market Street",
+   "length_m": 534,
+   "d_tstt": 7.334146315966332e-06,
+   "win": 0.6666666666666666,
+   "d_vkm": -6.206482985019839e-05,
+   "d_two_way_share": 0.0
+  },
+  "1|32|rev": {
+   "status": "same"
+  },
+  "1|33|two": {
+   "status": "same"
+  },
+  "1|33|fwd": {
+   "status": "ok",
+   "name": "Cumberland Street",
+   "length_m": 537,
+   "d_tstt": 3.793308336626685e-05,
+   "win": 0.0,
+   "d_vkm": 3.2662101975648263e-06,
+   "d_two_way_share": -0.003090713212216878
+  },
+  "1|33|rev": {
+   "status": "ok",
+   "name": "Cumberland Street",
+   "length_m": 537,
+   "d_tstt": -7.64528189015993e-06,
+   "win": 0.3333333333333333,
+   "d_vkm": -6.322836637025671e-05,
+   "d_two_way_share": -0.003090713212216878
+  },
+  "1|34|two": {
+   "status": "same"
+  },
+  "1|34|fwd": {
+   "status": "ok",
+   "name": "Smith Street",
+   "length_m": 415,
+   "d_tstt": 0.0004481662778080449,
+   "win": 0.0,
+   "d_vkm": 0.00019161794474675808,
+   "d_two_way_share": -0.002387905506808452
+  },
+  "1|34|rev": {
+   "status": "ok",
+   "name": "Smith Street",
+   "length_m": 415,
+   "d_tstt": 0.0005635183978847103,
+   "win": 0.0,
+   "d_vkm": 0.00024767310185251173,
+   "d_two_way_share": -0.002387905506808452
+  },
+  "1|35|two": {
+   "status": "same"
+  },
+  "1|35|fwd": {
+   "status": "ok",
+   "name": "Huger Street",
+   "length_m": 398,
+   "d_tstt": 0.0006002949844679714,
+   "win": 0.0,
+   "d_vkm": 0.0004681732749029314,
+   "d_two_way_share": -0.0022908287288672113
+  },
+  "1|35|rev": {
+   "status": "ok",
+   "name": "Huger Street",
+   "length_m": 398,
+   "d_tstt": 0.0001361661065331828,
+   "win": 0.6666666666666666,
+   "d_vkm": 0.00015651316182729857,
+   "d_two_way_share": -0.0022908287288672113
+  },
+  "1|36|two": {
+   "status": "blocked"
+  },
+  "1|36|fwd": {
+   "status": "ok",
+   "name": "Spring Street",
+   "length_m": 340,
+   "d_tstt": 0.005463373050069202,
+   "win": 0.0,
+   "d_vkm": 0.00238278525095,
+   "d_two_way_share": 0.0
+  },
+  "1|36|rev": {
+   "status": "same"
+  },
+  "1|37|two": {
+   "status": "same"
+  },
+  "1|37|fwd": {
+   "status": "ok",
+   "name": "Moultrie Street",
+   "length_m": 958,
+   "d_tstt": 0.0002662242023863115,
+   "win": 0.0,
+   "d_vkm": 9.072286354390909e-05,
+   "d_two_way_share": -0.005513473887893916
+  },
+  "1|37|rev": {
+   "status": "ok",
+   "name": "Moultrie Street",
+   "length_m": 958,
+   "d_tstt": 0.0008058935100948202,
+   "win": 0.0,
+   "d_vkm": 0.00043997476512269706,
+   "d_two_way_share": -0.005513473887893916
+  },
+  "1|38|two": {
+   "status": "ok",
+   "name": "Coming Street",
+   "length_m": 338,
+   "d_tstt": -4.807971491060936e-05,
+   "win": 1.0,
+   "d_vkm": -0.00012086879044189332,
+   "d_two_way_share": 0.0019437453110547898
+  },
+  "1|38|fwd": {
+   "status": "same"
+  },
+  "1|38|rev": {
+   "status": "ok",
+   "name": "Coming Street",
+   "length_m": 338,
+   "d_tstt": 0.0003323496648190612,
+   "win": 0.3333333333333333,
+   "d_vkm": 0.0002461951236785905,
+   "d_two_way_share": 0.0
+  },
+  "1|39|two": {
+   "status": "same"
+  },
+  "1|39|fwd": {
+   "status": "ok",
+   "name": "Courtenay Drive",
+   "length_m": 576,
+   "d_tstt": 0.0026054093812974224,
+   "win": 0.0,
+   "d_vkm": -0.0003979774821463167,
+   "d_two_way_share": -0.003315966687614913
+  },
+  "1|39|rev": {
+   "status": "ok",
+   "name": "Courtenay Drive",
+   "length_m": 576,
+   "d_tstt": 0.005349842091663263,
+   "win": 0.0,
+   "d_vkm": 0.004496239512516986,
+   "d_two_way_share": -0.003315966687614913
+  },
+  "1|40|two": {
+   "status": "same"
+  },
+  "1|40|fwd": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|40|rev": {
+   "status": "screened_out",
+   "reason": "core no longer strongly connected"
+  },
+  "1|41|two": {
+   "status": "same"
+  },
+  "1|41|fwd": {
+   "status": "ok",
+   "name": "Romney Street",
+   "length_m": 346,
+   "d_tstt": 0.0017864802876363939,
+   "win": 0.0,
+   "d_vkm": 0.0003148885703947446,
+   "d_two_way_share": -0.001993635778762437
+  },
+  "1|41|rev": {
+   "status": "ok",
+   "name": "Romney Street",
+   "length_m": 346,
+   "d_tstt": 0.003997782471168628,
+   "win": 0.0,
+   "d_vkm": 0.0009581884477421662,
+   "d_two_way_share": -0.001993635778762437
+  },
+  "1|42|two": {
+   "status": "same"
+  },
+  "1|42|fwd": {
+   "status": "ok",
+   "name": "Huger Street",
+   "length_m": 438,
+   "d_tstt": 0.0017446722008633841,
+   "win": 0.0,
+   "d_vkm": 0.002117742504904966,
+   "d_two_way_share": -0.0025181483169526286
+  },
+  "1|42|rev": {
+   "status": "ok",
+   "name": "Huger Street",
+   "length_m": 438,
+   "d_tstt": 0.0046148497572791785,
+   "win": 0.0,
+   "d_vkm": 0.005601497047415416,
+   "d_two_way_share": -0.0025181483169526286
+  },
+  "1|43|two": {
+   "status": "same"
+  },
+  "1|43|fwd": {
+   "status": "ok",
+   "name": "Heriot Street",
+   "length_m": 326,
+   "d_tstt": 0.0009607994689858254,
+   "win": 0.0,
+   "d_vkm": 0.0006621454694194137,
+   "d_two_way_share": -0.0018749630610502832
+  },
+  "1|43|rev": {
+   "status": "ok",
+   "name": "Heriot Street",
+   "length_m": 326,
+   "d_tstt": 0.00020546843654267732,
+   "win": 0.0,
+   "d_vkm": 2.0083113652757945e-05,
+   "d_two_way_share": -0.0018749630610502832
+  },
+  "1|44|two": {
+   "status": "same"
+  },
+  "1|44|fwd": {
+   "status": "ok",
+   "name": "Jonathan Lucas Street",
+   "length_m": 511,
+   "d_tstt": 0.00011986699644239707,
+   "win": 0.0,
+   "d_vkm": -1.6357734295202597e-05,
+   "d_two_way_share": -0.0029394428451726684
+  },
+  "1|44|rev": {
+   "status": "ok",
+   "name": "Jonathan Lucas Street",
+   "length_m": 511,
+   "d_tstt": 0.0002246769529912207,
+   "win": 0.0,
+   "d_vkm": 2.964137856372358e-05,
+   "d_two_way_share": -0.0029394428451726684
+  },
+  "1|45|two": {
+   "status": "same"
+  },
+  "1|45|fwd": {
+   "status": "ok",
+   "name": "Mechanic Street",
+   "length_m": 384,
+   "d_tstt": 0.00047408292349119624,
+   "win": 0.0,
+   "d_vkm": 0.00037389317599134664,
+   "d_two_way_share": -0.0022077964678773876
+  },
+  "1|45|rev": {
+   "status": "ok",
+   "name": "Mechanic Street",
+   "length_m": 384,
+   "d_tstt": 0.00029569100631721135,
+   "win": 0.0,
+   "d_vkm": 0.00026499049548463677,
+   "d_two_way_share": -0.0022077964678773876
+  }
+ },
+ "confirm": {},
+ "done": true,
+ "n_scenarios": 20,
+ "demand_scale": 1.3,
+ "peak": "both"
+}

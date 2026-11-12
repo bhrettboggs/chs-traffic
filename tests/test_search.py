@@ -207,3 +207,18 @@ def test_county_oneway_direction_logic():
     assert oneway_check._point_state(line, "TF", p, east) == "ba"
     assert oneway_check._point_state(line, "B", p, east) == "two"
     assert oneway_check._point_state(line, "FT", p, north) is None    # crossing street: no evidence
+
+
+def test_parallel_evaluate_matches_serial_and_peaks_add(grid):
+    D, table = grid
+    base = feasibility.apply_config(D, table, feasibility.baseline_config(table))
+    ods = demand.scenarios(base, _toy_zones(base), n=5, seed=4)
+    e = next(iter(base.edges()))
+    serial = robust.evaluate(base, ods, workers=0, watch=[e, ("nope", "nope")])
+    par = robust.evaluate(base, ods, workers=2, watch=[e, ("nope", "nope")])
+    np.testing.assert_array_equal(serial.tstt_h, par.tstt_h)        # same scenario order, same numbers
+    np.testing.assert_array_equal(serial.watched, par.watched)
+    assert np.all(serial.watched[:, 1] == 0)                         # an edge missing from the config carries nothing
+    both = robust.combine([serial, par])
+    np.testing.assert_allclose(both.tstt_h, 2 * serial.tstt_h)       # AM + PM: per scenario, not pooled
+    np.testing.assert_allclose(both.vkm, 2 * serial.vkm)

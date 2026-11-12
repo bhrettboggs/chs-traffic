@@ -1,6 +1,9 @@
 """P3 + P5: greedy search over the coarse corridor set, in resumable chunks.
 
     python scripts/09_search.py [--time-budget 150] [--max-rounds 5] [--scenarios 20] [--shortlist 12] [--reset]
+                                [--peak am|pm|both] [--demand-scale 1.0] [--state FILE] [--moves-out FILE] [--workers N]
+
+--peak both scores every move on AM + PM total travel time (scenario i of each peak uses the same draws).
 
 One round = try every corridor in every other state (two-way, one-way either
 direction) on top of the moves accepted so far:
@@ -43,8 +46,14 @@ def main() -> None:
     ap.add_argument("--reset", action="store_true")
     ap.add_argument("--demand-scale", type=float, default=config.DEMAND_SCALE,
                     help="multiply all demand (config.SENSITIVITY_DEMAND_LEVELS); not a calibrated state")
+    ap.add_argument("--peak", choices=["am", "pm", "both"], default=config.PEAK)
+    ap.add_argument("--state", type=Path, default=STATE, help="resumable state file (one per peak and demand level)")
+    ap.add_argument("--moves-out", type=Path, default=ROOT / "outputs" / "search_moves.csv")
+    ap.add_argument("--workers", type=int, default=0, help="processes for the scenarios (0 = this process only)")
     args = ap.parse_args()
     config.DEMAND_SCALE = args.demand_scale
+    STATE_FILE = args.state
+    peaks = ["am", "pm"] if args.peak == "both" else [args.peak]
     t0 = time.time()
     left = lambda: args.time_budget - (time.time() - t0)  # noqa: E731
 
@@ -55,21 +64,26 @@ def main() -> None:
     by_cid = {c.cid: c for c in cors}
     base_cfg = feasibility.baseline_config(table)
     B0 = feasibility.apply_config(D, table, base_cfg)
-    zones = demand.load_zones(B0, ROOT / "data" / "reference" / "zones.csv")
-    ods = demand.scenarios(B0, zones, n=args.scenarios)
-    ods_screen = ods[:config.SEARCH_SCREEN_SCENARIOS]
-    od_pairs = sorted({k for od in ods for k in od}, key=str)
+    ods_by = {pk: demand.scenarios(B0, demand.load_zones(B0, ROOT / "data" / "reference" / "zones.csv", peak=pk),
+                                   n=args.scenarios) for pk in peaks}
+    od_pairs = sorted({k for ods in ods_by.values() for od in ods for k in od}, key=str)
+
+    def ev_all(G, full: bool, gap: float = config.UE_GAP_SEARCH):
+        n = args.scenarios if full else config.SEARCH_SCREEN_SCENARIOS
+        evs = [robust.evaluate(G, ods_by[pk][:n], gap=gap, workers=args.workers) for pk in peaks]
+        return robust.combine(evs) if len(evs) > 1 else evs[0]
 
     (ROOT / "outputs").mkdir(exist_ok=True)
+    STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     st = dict(accepted=[], round=1, screen={}, confirm={}, done=False, n_scenarios=args.scenarios,
-              demand_scale=config.DEMAND_SCALE, peak=config.PEAK)
-    if STATE.exists() and not args.reset:
-        st = json.loads(STATE.read_text())
+              demand_scale=config.DEMAND_SCALE, peak=args.peak)
+    if STATE_FILE.exists() and not args.reset:
+        st = json.loads(STATE_FILE.read_text())
         if st["n_scenarios"] != args.scenarios:
             sys.exit("state file was made with a different --scenarios; use --reset")
-        if st.get("demand_scale", 1.0) != config.DEMAND_SCALE or st.get("peak", "am") != config.PEAK:
+        if st.get("demand_scale", 1.0) != config.DEMAND_SCALE or st.get("peak", "am") != args.peak:
             sys.exit("state file was made at another demand scale or peak; use --reset (or keep a copy per level)")
-    save = lambda: STATE.write_text(json.dumps(st, indent=1))  # noqa: E731
+    save = lambda: STATE_FILE.write_text(json.dumps(st, indent=1))  # noqa: E731
 
     def cfg_after(moves):
         cfg = dict(base_cfg)
@@ -83,7 +97,7 @@ def main() -> None:
         cur_cfg = cfg_after(st["accepted"])
         D_cur = feasibility.apply_config(D, table, cur_cfg)
         core = feasibility.core_nodes(D_cur)
-        cur_screen = robust.evaluate(D_cur, ods_screen, gap=config.SEARCH_SCREEN_GAP)
+        cur_screen = ev_all(D_cur, False, gap=config.SEARCH_SCREEN_GAP)
         share_cur = feasibility.two_way_share(table, cur_cfg)
         # ---- stage 1: screen every candidate
         short = None
@@ -110,7 +124,7 @@ def main() -> None:
                     st["screen"][key] = dict(status="screened_out", reason=sc.reason)
                     save()
                     continue
-                ev = robust.evaluate(D_new, ods_screen, gap=config.SEARCH_SCREEN_GAP)
+                ev = ev_all(D_new, False, gap=config.SEARCH_SCREEN_GAP)
                 s = robust.score_config(cur_screen, ev)
                 st["screen"][key] = dict(status="ok", name=c.name, length_m=round(feasibility.corridor_length_m(table, c)),
                                          d_tstt=s.mean_change, win=s.win_rate,
@@ -132,7 +146,7 @@ def main() -> None:
             if cur_full is None:                       # cached: it costs as much as one candidate
                 ck = f"full|{st['round']}"
                 if ck not in st.setdefault("cache", {}):
-                    e = robust.evaluate(D_cur, ods)
+                    e = ev_all(D_cur, True)
                     st["cache"][ck] = dict(tstt=e.tstt_h.tolist(), unreachable=e.unreachable.tolist(),
                                            gap=e.max_gap, vkm=e.vkm.tolist())
                     save()
@@ -143,7 +157,7 @@ def main() -> None:
                     return
             _, cid, mode = key.split("|")
             cand = {**cur_cfg, **by_cid[int(cid)].config_for(table, mode)[0]}
-            ev = robust.evaluate(feasibility.apply_config(D, table, cand), ods)
+            ev = ev_all(feasibility.apply_config(D, table, cand), True)
             s = robust.score_config(cur_full, ev)
             st["confirm"][key] = dict(name=by_cid[int(cid)].name, mode=mode, mean=s.mean_change, p10=s.p10, median=s.median,
                                       p90=s.p90, win=s.win_rate, accept=bool(s.accept()),
@@ -170,7 +184,7 @@ def main() -> None:
                          **{k: x for k, x in v.items() if k != "name"}, **{f"confirm_{k}": x for k, x in
                          st["confirm"].get(key, {}).items() if k not in ("name", "mode")}))
     df = pd.DataFrame(rows)
-    df.to_csv(ROOT / "outputs" / "search_moves.csv", index=False)
+    df.to_csv(args.moves_out, index=False)
     ok = df[df.status == "ok"].sort_values("d_tstt")
     pd.set_option("display.width", 220)
     print(f"\nstatus counts: {df.status.value_counts().to_dict()}")

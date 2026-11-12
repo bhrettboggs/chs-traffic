@@ -29,8 +29,8 @@ sys.path.insert(0, str(ROOT / "src"))
 from chstraffic import config, demand, feasibility, widths  # noqa: E402
 from chstraffic.calibrate import count_k, locate  # noqa: E402
 from chstraffic.fast_assignment import Network, user_equilibrium  # noqa: E402
+from chstraffic.variants import spring_cannon_before  # noqa: E402
 
-BEFORE = {"Spring Street": "west", "Cannon Street": "east"}
 STATIONS = {"Spring Street": ("^Spring Street$", "^Meeting Street$", "Septima", 5600, 419),
             "Cannon Street": ("^Cannon Street$", "Septima", "^Coming Street$", 5700, 417)}
 
@@ -66,13 +66,7 @@ def main() -> None:
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
                                       widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     after_cfg = feasibility.baseline_config(table)
-    before_cfg, changed = dict(after_cfg), []
-    for sid, s in table.items():
-        if s.name in BEFORE and s.state == "two":
-            heads_east = D.nodes[s.b]["x"] > D.nodes[s.a]["x"]            # direction of a -> b
-            want_east = BEFORE[s.name] == "east"
-            before_cfg[sid] = "ab" if heads_east == want_east else "ba"
-            changed.append((s.name, round(s.template["length_m"]), s.total_lanes))
+    before_cfg, changed = spring_cannon_before(D, table, after_cfg)
     ch = pd.DataFrame(changed, columns=["street", "length_m", "lanes"])
     print("segments made one-way for 'before':")
     print(ch.groupby("street").agg(segments=("length_m", "size"), metres=("length_m", "sum"),

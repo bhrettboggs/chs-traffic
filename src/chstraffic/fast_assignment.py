@@ -67,6 +67,17 @@ class Network:
         self._W = csr_matrix((np.ones(len(order)), (self.u[order], self.v[order])), shape=(self.n, self.n))
         self._W.sort_indices()
 
+    # The two edge lookups are n*n / per-edge tables (~10 MB on the peninsula). Leave them out when a
+    # Network is pickled to a worker process and rebuild them there (WinError 1450 with 15 workers).
+    def __getstate__(self):
+        return {k: v for k, v in self.__dict__.items() if k not in ("eid_dense", "_eid")}
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._eid = {int(a) * self.n + int(b): k for k, (a, b) in enumerate(zip(self.u, self.v))}
+        self.eid_dense = np.full(self.n * self.n, -1, dtype=np.int64)
+        self.eid_dense[self.u * self.n + self.v] = np.arange(len(self.edges))
+
     def weights(self, w: np.ndarray) -> csr_matrix:
         self._W.data = np.maximum(w[self._csr_order], 1e-9)
         return self._W
