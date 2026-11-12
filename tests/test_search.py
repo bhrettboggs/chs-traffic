@@ -68,6 +68,51 @@ def test_overrides_change_lanes_and_freeze(grid, tmp_path):
     assert av0 and all(s.frozen_reason == "override" for s in av0)
 
 
+def _heading(D, s, state):
+    """(dx, dy) in degrees of the direction a one-way state travels."""
+    u, v = (s.a, s.b) if state == "ab" else (s.b, s.a)
+    return D.nodes[v]["x"] - D.nodes[u]["x"], D.nodes[v]["y"] - D.nodes[u]["y"]
+
+
+def test_direction_overrides(grid, tmp_path):
+    D, table = grid
+    # Street 5 is a one-lane one-way in OSM; say it is really two-way. Avenue 1 is one-way; say it runs the
+    # other way. Street 0 is two-way; say one of its ways (by osmid) is one-way north (or east).
+    s5 = [s for s in table.values() if s.name == "Street 5"]
+    av1 = [s for s in table.values() if s.name == "Avenue 1"]
+    st0 = next(s for s in table.values() if s.name == "Street 0" and s.template.get("osmid") is not None)
+    av1_now = _heading(D, av1[0], av1[0].state)
+    flip = ("E" if av1_now[0] < 0 else "W") if abs(av1_now[0]) > abs(av1_now[1]) else ("N" if av1_now[1] < 0 else "S")
+    osm0 = st0.template["osmid"]
+    dx, dy = _heading(D, st0, "ab")
+    want0, axis0 = ("N", 1) if abs(dy) > abs(dx) else ("E", 0)
+    p = tmp_path / "overrides.csv"
+    p.write_text("name,osmid,total_lanes,frozen,direction,source,note\n"
+                 f"Street 5,,,,two,test,\nAvenue 1,,,,{flip},test,\nStreet 0,{osm0},,,{want0},test,\n")
+    t2 = feasibility.segment_table(D, feasibility.load_overrides(p))
+    for s in s5:
+        assert t2[s.sid].state == "two" and t2[s.sid].total_lanes >= 2 and "two" in t2[s.sid].allowed
+        assert t2[s.sid].direction_source == "override"
+    for s in av1:
+        assert t2[s.sid].state != s.state and t2[s.sid].state in ("ab", "ba")
+        assert t2[s.sid].total_lanes == s.total_lanes          # pavement unchanged
+    hits = [s for s in t2.values() if str(s.template.get("osmid")) == str(osm0)]
+    assert hits and all(s.state in ("ab", "ba") and _heading(D, s, s.state)[axis0] > 0 for s in hits)
+    untouched = [s for s in t2.values() if s.direction_source == "osm"]
+    assert untouched and all(s.state == table[s.sid].state for s in untouched)
+    # the corrected baseline is what apply_config builds, edges included
+    B = feasibility.apply_config(D, t2, feasibility.baseline_config(t2))
+    for s in s5:
+        assert B.has_edge(s.a, s.b) and B.has_edge(s.b, s.a)
+    for s in av1:
+        u, v = (s.a, s.b) if t2[s.sid].state == "ab" else (s.b, s.a)
+        assert B.has_edge(u, v) and not B.has_edge(v, u)
+    # a bad direction value is refused, not silently ignored
+    p.write_text("name,osmid,total_lanes,frozen,direction,source,note\nStreet 5,,,,northbound,test,\n")
+    with pytest.raises(ValueError):
+        feasibility.load_overrides(p)
+
+
 def test_screen_catches_stranded_grid(grid):
     D, table = grid
     base = feasibility.apply_config(D, table, feasibility.baseline_config(table))
@@ -148,3 +193,17 @@ def test_coarse_corridors_are_a_subset_and_two_way_share_moves(grid):
     one_way = next(c for c in coarse if any(table[sid].state != "two" for sid in c.segments))
     part, blocked = one_way.config_for(table, "two")
     assert not blocked and feasibility.two_way_share(table, {**base, **part}) > share
+
+
+def test_county_oneway_direction_logic():
+    """FT = travel along the county line's digitized direction, TF = against it, B = both."""
+    from shapely.geometry import LineString, Point
+    from chstraffic import oneway_check
+    line = LineString([(0, 0), (100, 0)])          # digitized west -> east
+    p = Point(50, 1)
+    east, west, north = (10, 0), (-10, 0), (0, 10)
+    assert oneway_check._point_state(line, "FT", p, east) == "ab"
+    assert oneway_check._point_state(line, "FT", p, west) == "ba"
+    assert oneway_check._point_state(line, "TF", p, east) == "ba"
+    assert oneway_check._point_state(line, "B", p, east) == "two"
+    assert oneway_check._point_state(line, "FT", p, north) is None    # crossing street: no evidence

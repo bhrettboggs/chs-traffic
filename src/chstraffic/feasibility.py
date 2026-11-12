@@ -40,6 +40,7 @@ class Segment:
     template: dict = field(repr=False, default_factory=dict)
     frozen_reason: str | None = None
     lanes_source: str = "osm"     # "osm" or "override"
+    direction_source: str = "osm"  # "osm" or "override" (today's direction corrected in overrides.csv)
 
 
 def _canon(sid):
@@ -60,18 +61,47 @@ def load_overrides(path: Path | str) -> list[dict]:
         return []
     with open(path, newline="", encoding="utf-8") as f:
         rows = [r for r in csv.DictReader(line for line in f if not line.startswith("#"))]
-    return [r for r in rows if (r.get("total_lanes") or r.get("frozen"))]
+    rows = [r for r in rows if (r.get("total_lanes") or r.get("frozen") or (r.get("direction") or "").strip())]
+    for r in rows:
+        d = (r.get("direction") or "").strip().lower()
+        if d and d != "two" and d.upper() not in _COMPASS:
+            raise ValueError(f"overrides.csv: direction {r['direction']!r} must be 'two' or one of {sorted(_COMPASS)}")
+    return rows
 
 
-def _override_for(seg_osmids: set, name, rows):
-    """Most specific match wins: osmid beats name."""
-    by_name = None
+# Unit vectors (east, north) for the compass directions a one-way override may name.
+_COMPASS = {"N": (0, 1), "S": (0, -1), "E": (1, 0), "W": (-1, 0),
+            "NE": (0.7071, 0.7071), "NW": (-0.7071, 0.7071), "SE": (0.7071, -0.7071), "SW": (-0.7071, -0.7071)}
+
+
+def _override_for(seg_osmids: set, name, rows) -> dict:
+    """Merge every matching row field by field; a row matched by osmid beats one matched by name.
+
+    Returns {} when nothing matches. Fields: total_lanes, frozen, direction, source.
+    """
+    by_name, by_osmid = {}, {}
     for r in rows:
         if r.get("osmid") and str(r["osmid"]).strip() in seg_osmids:
-            return r
-        if not r.get("osmid") and r.get("name") and r["name"] == name:
-            by_name = r
-    return by_name
+            target = by_osmid
+        elif not r.get("osmid") and r.get("name") and r["name"] == name:
+            target = by_name
+        else:
+            continue
+        for k in ("total_lanes", "frozen", "direction", "source"):
+            if (r.get(k) or "").strip():
+                target[k] = r[k].strip()
+    return {**by_name, **by_osmid}
+
+
+def _state_toward(D, a, b, compass: str) -> str:
+    """'ab' if travel a -> b points more toward `compass` than b -> a does, else 'ba'."""
+    ex, ny = _COMPASS[compass.upper()]
+    dy = D.nodes[b]["y"] - D.nodes[a]["y"]
+    dx = (D.nodes[b]["x"] - D.nodes[a]["x"]) * math.cos(math.radians(D.nodes[a]["y"]))
+    dot = dx * ex + dy * ny
+    if abs(dot) < 1e-9:
+        raise ValueError(f"segment {a}-{b} runs perpendicular to {compass}; name a different direction")
+    return "ab" if dot > 0 else "ba"
 
 
 def segment_table(D: nx.DiGraph, overrides: list[dict] | None = None,
@@ -95,7 +125,7 @@ def segment_table(D: nx.DiGraph, overrides: list[dict] | None = None,
         total = d0.get("seg_total_lanes") or sum(d["lanes"] for _, _, d in es)
         hwy, name = d0["highway"], d0.get("name")
         osmids = {str(d.get("osmid")) for _, _, d in es}
-        frozen_reason, src = None, "osm"
+        frozen_reason, src, dir_src = None, "osm", "osm"
         if (config.USE_WIDTH_LANES and sid in widths and not d0.get("lanes_tagged", True)
                 and not d0.get("seg_total_lanes")):
             total, src = widths[sid], "city width"
@@ -105,11 +135,20 @@ def segment_table(D: nx.DiGraph, overrides: list[dict] | None = None,
                 total, src = int(ov["total_lanes"]), "override"
             if str(ov.get("frozen", "")).strip().lower() in {"1", "true", "yes"}:
                 frozen_reason = "override"
+            want = (ov.get("direction") or "").strip()
+            if want:
+                # Today's direction corrected from a second source (data/reference/overrides.csv).
+                # The OSM template still supplies speed, class and length for the rebuilt edges.
+                state = "two" if want.lower() == "two" else _state_toward(D, a, b, want)
+                dir_src = "override"
+                if state == "two" and not ov.get("total_lanes"):
+                    # Traffic runs both ways today, so the pavement carries at least one lane each way.
+                    total = max(int(total), 2)
         if hwy in config.FROZEN_HIGHWAYS:
             frozen_reason = frozen_reason or "freeway/trunk"
         table[sid] = Segment(sid=sid, a=a, b=b, total_lanes=int(total), highway=hwy, name=name,
                              state=state, allowed=(), template=dict(d0),
-                             frozen_reason=frozen_reason, lanes_source=src)
+                             frozen_reason=frozen_reason, lanes_source=src, direction_source=dir_src)
 
     _mark_divided(D, table)
     for s in table.values():

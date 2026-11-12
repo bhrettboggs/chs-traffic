@@ -13,6 +13,7 @@ Charleston has spent 30 years converting peninsula one-way pairs back to two-way
 ```
 01_fetch_osm.py     OpenStreetMap ──► data/raw/chs_peninsula_drive.graphml
 02_build_graph.py   graphml ──► weighted DiGraph (length, speed, lanes, capacity, one-way flag)
+10_oneway_check.py  OSM one-way directions vs Charleston County street centerlines; fixes go in overrides.csv
 06_build_zones.py   Census LODES jobs and workers by block ──► 90 zones, connectors, internal commutes
 04_calibrate.py     model flows vs 37 SCDOT count stations (GEH); 07_tune.py tries demand knobs on half of them
 08_backtest_...py   Spring/Cannon before vs after the 2017 two-way conversion (plausibility check)
@@ -35,6 +36,7 @@ python scripts/02_build_graph.py
 * Street network: © OpenStreetMap contributors (ODbL)
 * Jobs, workers and commute flows: U.S. Census Bureau, LEHD Origin-Destination Employment Statistics (LODES 8.5, 2024)
 * Traffic counts: SCDOT 2025 Average Daily Traffic, Charleston County (see `data/raw/README.md`)
+* One-way check and street widths: Charleston County GIS (Streets centerlines; City of Charleston pavement inventory)
 
 ## Status
 Early stage. See `HANDOFF.md` for the build plan.

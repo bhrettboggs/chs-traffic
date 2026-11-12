@@ -9,20 +9,24 @@
 #   i.e. keep at least one side of parking. A width of 30 ft therefore allows 2 lanes only with one parking side.
 # Explicit OSM lanes tags were overridden only where the same city section has 2-lane neighbors.
 # Meeting St is not in the city inventory (state route); its segments are unchanged.
-name,osmid,total_lanes,frozen,source,note
-Coming Street,38730522,2,,city pavement 2024,COMING ST (SPRING ST - US HWY 17) 30 ft; OSM untagged. WEAK: width rule is ~62% reliable (HANDOFF 9); verify striping on site
-Rutledge Avenue,391527983,2,,city pavement 2024,RUTLEDGE AV (CAROLINA ST - CONGRESS ST) 35 ft; OSM untagged one-way
-Rutledge Avenue,78412406,2,,city pavement 2024,RUTLEDGE AV (COURTLAND AV - RUTLEDGE AV) 33 ft; OSM untagged one-way
-Rutledge Avenue,143986208,2,,city pavement 2024,RUTLEDGE AV (BEAUFAIN ST - CALHOUN ST) 31 ft; OSM lanes=1 but 2-lane neighbors
-Rutledge Avenue,631676636,2,,city pavement 2024,RUTLEDGE AV (CAROLINA - STRAWBERRY LN) 34-35 ft; confirms default
-Rutledge Avenue,262473861,2,,city pavement 2024,RUTLEDGE AV (STRAWBERRY LN - COURTLAND AV) 35 ft; confirms default
-Rutledge Avenue,631676637,2,,city pavement 2024,RUTLEDGE AV (SIMONS ST - COURTLAND AV) 35 ft; confirms default
-Rutledge Avenue,1081651328,2,,city pavement 2024,RUTLEDGE AV (COURTLAND AV - RUTLEDGE AV) 33 ft; confirms default
-Ashley Avenue,904880235,2,,city pavement 2024,ASHLEY AV (BOGARD ST - FISHBURNE ST) 34 ft; OSM lanes=1 but same section tagged 2-3
-Calhoun Street,1203760969,2,,city pavement 2024,CALHOUN ST west end 44 ft; OSM lanes=1
-King Street,263633418,2,,city pavement 2024,KING ST (S BATTERY ST - MURRAY BLVD) 28 ft; confirms default
-King Street,489876679,1,,city pavement 2024,KING ST (S BATTERY ST - PRICES ALY) 21 ft; confirms 1 lane
-King Street,493929010,1,,city pavement 2024,KING ST (BROAD ST - TRADD ST) 22 ft; confirms 1 lane
-St. Philip Street,632285022,1,,city pavement 2024,SAINT PHILIP ST (WENTWORTH ST - GEORGE ST) 25 ft; confirms 1 lane
-St. Philip Street,1464330008,1,,city pavement 2024,SAINT PHILIP ST (WENTWORTH ST - GEORGE ST) 25 ft; confirms 1 lane
-St. Philip Street,179722978,2,,city pavement 2024,SAINT PHILIP ST (RODGERS ALY - BOGARD ST) 36 ft; confirms default
+# direction (added 2026-11-12) = TODAY's travel direction when OSM has it wrong: "two", or the compass
+#   direction a one-way runs toward (N, S, E, W, NE, NW, SE, SW; each segment takes whichever of its two
+#   orientations points closer to it). Evidence for each direction row is in its source and note columns.
+name,osmid,total_lanes,frozen,direction,source,note
+Coming Street,38730522,2,,,city pavement 2024,COMING ST (SPRING ST - US HWY 17) 30 ft; OSM untagged. WEAK: width rule is ~62% reliable (HANDOFF 9); verify striping on site
+Rutledge Avenue,391527983,2,,,city pavement 2024,RUTLEDGE AV (CAROLINA ST - CONGRESS ST) 35 ft; OSM untagged one-way
+Rutledge Avenue,78412406,2,,,city pavement 2024,RUTLEDGE AV (COURTLAND AV - RUTLEDGE AV) 33 ft; OSM untagged one-way
+Rutledge Avenue,143986208,2,,,city pavement 2024,RUTLEDGE AV (BEAUFAIN ST - CALHOUN ST) 31 ft; OSM lanes=1 but 2-lane neighbors
+Rutledge Avenue,631676636,2,,,city pavement 2024,RUTLEDGE AV (CAROLINA - STRAWBERRY LN) 34-35 ft; confirms default
+Rutledge Avenue,262473861,2,,,city pavement 2024,RUTLEDGE AV (STRAWBERRY LN - COURTLAND AV) 35 ft; confirms default
+Rutledge Avenue,631676637,2,,,city pavement 2024,RUTLEDGE AV (SIMONS ST - COURTLAND AV) 35 ft; confirms default
+Rutledge Avenue,1081651328,2,,,city pavement 2024,RUTLEDGE AV (COURTLAND AV - RUTLEDGE AV) 33 ft; confirms default
+Ashley Avenue,904880235,2,,,city pavement 2024,ASHLEY AV (BOGARD ST - FISHBURNE ST) 34 ft; OSM lanes=1 but same section tagged 2-3
+Calhoun Street,1203760969,2,,,city pavement 2024,CALHOUN ST west end 44 ft; OSM lanes=1
+King Street,263633418,2,,,city pavement 2024,KING ST (S BATTERY ST - MURRAY BLVD) 28 ft; confirms default
+King Street,489876679,1,,,city pavement 2024,KING ST (S BATTERY ST - PRICES ALY) 21 ft; confirms 1 lane
+King Street,493929010,1,,,city pavement 2024,KING ST (BROAD ST - TRADD ST) 22 ft; confirms 1 lane
+St. Philip Street,632285022,1,,,city pavement 2024,SAINT PHILIP ST (WENTWORTH ST - GEORGE ST) 25 ft; confirms 1 lane
+St. Philip Street,1464330008,1,,,city pavement 2024,SAINT PHILIP ST (WENTWORTH ST - GEORGE ST) 25 ft; confirms 1 lane
+St. Philip Street,179722978,2,,,city pavement 2024,SAINT PHILIP ST (RODGERS ALY - BOGARD ST) 36 ft; confirms default
+Beaufain Street,503104858,,,two,city 2004 conversion + county GIS ONE_WAY,"BEAUFAIN ST St. Philip-Market (176 m): OSM one-way SW; county Streets layer 138 says two-way; Beaufain converted to two-way in 2004 (Baco 2009 via City Paper 2017); OSM has two-way on both sides. ~75% sure; see oneway_review.csv"

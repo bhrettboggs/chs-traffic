@@ -42,6 +42,46 @@ def lanes_from_width(width_ft: float) -> int:
     return max(1, int((width_ft - parking) // config.LANE_WIDTH_FT))
 
 
+def segment_line(D: nx.DiGraph, u, v, to_m) -> LineString:
+    """Straight u -> v line in metres (UTM 17N)."""
+    return LineString([to_m(D.nodes[u]["x"], D.nodes[u]["y"]), to_m(D.nodes[v]["x"], D.nodes[v]["y"])])
+
+
+def point_matches(D: nx.DiGraph, lines: list, names: list, max_m: float = config.WIDTH_MATCH_MAX_M,
+                  fracs=(0.25, 0.5, 0.75)):
+    """Name-plus-distance join, the rule both the width join and the one-way check use.
+
+    Yields (segment_id, (a, b), seg_line, hits) once per physical segment with a street name, where
+    (a, b) is the canonical node order (sorted by str, as in feasibility) and hits is a list with one
+    entry per sample point: (point, [(line_index, dist_m), ...]) for every line in `lines` (metres)
+    whose normalized name equals the segment's and lies within max_m of that point.
+    """
+    tree = STRtree(lines)
+    to_m = Transformer.from_crs("EPSG:4326", "EPSG:32617", always_xy=True).transform
+    seen = set()
+    for u, v, d in D.edges(data=True):
+        sid = d["segment_id"]
+        if sid in seen or len(sid) < 2:
+            continue
+        seen.add(sid)
+        nm = norm_name(d.get("name"))
+        if not nm:
+            continue
+        a, b = sorted(sid, key=str)
+        seg = segment_line(D, a, b, to_m)
+        hits = []
+        for frac in fracs:
+            p = seg.interpolate(frac, normalized=True)
+            near = []
+            for i in tree.query(p.buffer(max_m)):
+                if names[i] == nm:
+                    dist = lines[i].distance(p)
+                    if dist <= max_m:
+                        near.append((int(i), dist))
+            hits.append((p, near))
+        yield sid, (a, b), seg, hits
+
+
 def join(D: nx.DiGraph, geojson_path: Path | str) -> dict:
     """Return {segment_id: dict(width_ft, lanes, section, dist_m)} for matched segments."""
     fc = json.loads(Path(geojson_path).read_text())
@@ -52,29 +92,15 @@ def join(D: nx.DiGraph, geojson_path: Path | str) -> dict:
             continue
         lines.append(transform(to_m, shape(f["geometry"])))
         props.append(f["properties"])
-    tree = STRtree(lines)
     names = [norm_name(p["PMS_SECTIO"]) for p in props]
 
     out = {}
-    seen = set()
-    for u, v, d in D.edges(data=True):
-        sid = d["segment_id"]
-        if sid in seen or len(sid) < 2:
-            continue
-        seen.add(sid)
-        nm = norm_name(d.get("name"))
-        if not nm:
-            continue
-        seg = LineString([to_m(D.nodes[u]["x"], D.nodes[u]["y"]), to_m(D.nodes[v]["x"], D.nodes[v]["y"])])
+    for sid, _ab, _seg, hits in point_matches(D, lines, names):
         votes = {}
-        for frac in (0.25, 0.5, 0.75):
-            p = seg.interpolate(frac, normalized=True)
-            for i in tree.query(p.buffer(config.WIDTH_MATCH_MAX_M)):
-                if names[i] == nm:
-                    dist = lines[i].distance(p)
-                    if dist <= config.WIDTH_MATCH_MAX_M:
-                        best = votes.get(i)
-                        votes[i] = (best[0] + 1, min(best[1], dist)) if best else (1, dist)
+        for _p, near in hits:
+            for i, dist in near:
+                best = votes.get(i)
+                votes[i] = (best[0] + 1, min(best[1], dist)) if best else (1, dist)
         if not votes:
             continue
         i, (n, dist) = max(votes.items(), key=lambda kv: (kv[1][0], -kv[1][1]))
