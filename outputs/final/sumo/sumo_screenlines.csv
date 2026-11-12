@@ -1,0 +1,13 @@
+peak,screenline,name,streets,count_peak,tolerance,sumo_median,sumo_min,sumo_max,sumo_dev,sumo_passes,static_base_od,static_dev,static_passes,sumo_over_static
+am,A,Upper peninsula (Race St to Mount Pleasant St),4,4778,0.3,5016,4998,5139,0.05,True,3019,-0.37,False,1.66
+am,B,Line St to Spring St band,6,2204,0.41,4669,4539,4849,1.12,False,3611,0.64,False,1.29
+am,C,Calhoun St to Cannon St band,7,6046,0.28,5043,4960,5120,-0.17,True,6028,-0.0,True,0.84
+am,D,South of Calhoun St,4,811,0.59,980,969,1039,0.21,True,657,-0.19,True,1.49
+am,E,West side (Lockwood Dr to Rutledge Ave),7,9798,0.25,5856,5754,5974,-0.4,False,9366,-0.04,True,0.63
+am,F,Middle (Rutledge Ave to Meeting St),4,3042,0.35,2835,2798,2885,-0.07,True,3221,0.06,True,0.88
+pm,A,Upper peninsula (Race St to Mount Pleasant St),4,5052,0.3,3699,3662,3774,-0.27,True,2711,-0.46,False,1.36
+pm,B,Line St to Spring St band,6,2329,0.41,4006,3859,4077,0.72,False,2224,-0.04,True,1.8
+pm,C,Calhoun St to Cannon St band,7,6389,0.28,4562,4491,4650,-0.29,False,4898,-0.23,True,0.93
+pm,D,South of Calhoun St,4,857,0.59,931,858,952,0.09,True,565,-0.34,True,1.65
+pm,E,West side (Lockwood Dr to Rutledge Ave),7,10356,0.25,5123,5080,5203,-0.51,False,7846,-0.24,True,0.65
+pm,F,Middle (Rutledge Ave to Meeting St),4,3215,0.35,2676,2614,2722,-0.17,True,2559,-0.2,True,1.05

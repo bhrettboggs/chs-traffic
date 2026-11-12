@@ -52,6 +52,7 @@ On Linux/macOS use `python` and forward slashes. To redo everything, delete `out
 | `search_state_both_x*.json`, `search_moves_x*.csv`, `search_moves.csv` | Open search per demand level: every move screened, confirmed and accepted |
 | `pareto_screening.csv`, `pareto_confirmed.csv` | Non-dominated single moves (TSTT, veh-km, two-way share), then confirmed on all scenarios |
 | `raw/*.csv` | One row per (configuration, peak, demand level, bonus, scenario) |
+| `sumo/` | Task 4 SUMO check (`scripts/14_sumo_check.py all --workers N`, needs `requirements-sumo.txt`): `SUMO_CHECK.md` (tables), `sumo_check.csv` (static vs SUMO per variant and peak), `sumo_runs.csv` (every run, teleports), `sumo_screenlines.csv`. Networks, trips and raw SUMO output go to `outputs/sumo/` (not in git). Result: SUMO's seed-to-seed noise (3.5%) is far larger than the static effects (0.03 to 0.2%), so it neither confirms nor contradicts them |
 
 The model is not calibrated at link level (screenlines pass AM 4 of 6, PM 5 of 6). These are relative comparisons
 between street configurations on the same model, not forecasts of Charleston traffic.

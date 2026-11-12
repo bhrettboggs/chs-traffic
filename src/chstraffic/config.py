@@ -251,3 +251,35 @@ USE_WIDTH_LANES = False
 # Not read off the original figure. Values between points are interpolated.
 SCREENLINE_TOLERANCE = [(10_000, 0.60), (20_000, 0.45), (40_000, 0.35), (60_000, 0.30),
                         (80_000, 0.28), (200_000, 0.20)]
+
+# ---------------------------------------------------------------------------
+# SUMO cross-check (sumo.py, scripts/14_sumo_check.py). ASSUMPTIONS unless noted.
+# ---------------------------------------------------------------------------
+# netconvert: OSM import recommended by the SUMO docs (join junction clusters, signals from OSM tags,
+# ramps and roundabouts guessed). Signal programs are netconvert's defaults, NOT Charleston's timings:
+# only relative changes between variants are reported.
+SUMO_NETCONVERT_OPTS = [
+    "--junctions.join", "--tls.guess-signals", "--tls.discard-simple", "--tls.join",
+    "--ramps.guess", "--roundabouts.guess", "--remove-edges.isolated",
+    "--keep-edges.by-vclass", "passenger", "--output.original-names", "--osm.elevation", "false",
+]
+SUMO_OSM_NODE_TAGS = {"highway", "traffic_signals", "traffic_signals:direction"}   # node tags passed on
+SUMO_OSM_NODE_HIGHWAY = {"traffic_signals", "stop", "give_way"}
+SUMO_WARMUP_S = 900          # demand runs at the peak-hour rate from t=0; only trips due after this count
+SUMO_PEAK_S = 3600           # the measured peak hour
+SUMO_DRAIN_S = 3600          # extra time for the last vehicles to finish
+SUMO_TELEPORT_S = 300        # SUMO default: a vehicle stuck this long is teleported (gridlock resolution)
+SUMO_REROUTE_PERIOD_S = 120  # rerouting device: each vehicle re-plans on current travel times this often
+SUMO_REROUTE_ADAPTATION_STEPS = 18   # SUMO default smoothing of edge travel times
+SUMO_SIM_OPTS = ["--ignore-route-errors"]
+SUMO_MESO_OPTS = ["--meso-junction-control"]   # junctions (signals, right of way) limit flow in meso
+SUMO_SEEDS = 5
+SUMO_SEED_BASE = 4100
+# A run is "stable" (no gridlock) if teleports are below this share of loaded vehicles, every vehicle was
+# inserted and none is left in the network at the end. If the baseline fails at demand x1.0, demand is
+# lowered in these steps.
+SUMO_STABLE_TELEPORT_SHARE = 0.005
+SUMO_DEMAND_STEPS = (1.0, 0.9, 0.8, 0.7, 0.6, 0.5)
+# Verdict per variant (fixed before the runs). SUMO effect "detectable" = same sign in >= 80% of seeds AND
+# |mean| > max(0.1%, 2 x the SUMO noise floor: median |change| of the baseline re-run with another sim seed).
+SUMO_MIN_SIGN_SHARE = 0.8
