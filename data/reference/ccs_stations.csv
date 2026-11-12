@@ -1,0 +1,15 @@
+# SCDOT continuous count stations (hourly, permanent) used for peak-hour factors: scripts/11_peak_factors.py.
+# Hourly counts: data/raw/scdot_ccs_hourly_2025.csv. Site list, descriptions, lat/lon and aadt from the public
+# Drakewell site layer (scdottrafficdata.drakewell.com, /dataserver/public/sites and /public/aadt), read 2026-11-12.
+# group: stations with the same group are summed into one count (0006 + 0007 are two halves of one SCDOT section:
+#   both are flagged "merged" and SCDOT publishes one AADT, 98,900, for the section, which equals station 127's 2025
+#   AADT used for the ravenel gateway; their weekday total is 1.11 x that AADT, the same ratio as the other two stations).
+# aadt is the section AADT shown by Drakewell (blank on the second station of a group). Year not printed on the
+#   layer; 98,900 matches SCDOT 2025 station 127, so read as 2025 (~80% sure for 0031 and 0040).
+# inbound_dir = the direction of travel toward the peninsula. US 17 is signed north toward Mount Pleasant on the
+#   bridge (so S = toward Charleston) and north toward Charleston in West Ashley.
+station,group,description,lat,lon,aadt,inbound_dir,represents,distance_note,source
+0006,ravenel,US 17: I-26 to SC 703 (Coleman Blvd),32.79874,-79.89867,98900,S,ravenel,Mount Pleasant end of the Ravenel Bridge section; same SCDOT section as the gateway (station 127),Drakewell site 0006
+0007,ravenel,US 17: I-26 to SC 703 (Coleman Blvd),32.80183,-79.89752,,S,ravenel,second half of the same section (incl. a south ramp lane),Drakewell site 0007
+0031,i26,I-26: Montague Ave to Dorchester Rd,32.85764,-79.99125,101000,E,i26,about 6 km up I-26 from the gateway; 2205 (98100) is downstream of several interchanges,Drakewell site 0031
+0040,westashley,US 17: Oak Forest Dr to Wesley Dr,32.78133,-79.98201,37200,N,crosstown,US 17 (Savannah Hwy) in West Ashley about 1.5 km west of the Ashley bridges; carries part of the bridge traffic only,Drakewell site 0040

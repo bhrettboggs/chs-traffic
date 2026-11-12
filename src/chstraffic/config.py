@@ -66,8 +66,10 @@ BPR_BETA = 4.0
 # use a speed factor; we use a capacity multiplier. ASSUMPTION — sensitivity-test it.
 ONEWAY_CAPACITY_BONUS = 1.10
 
-# Peak-hour factor: share of daily (AADT) traffic in the design peak hour.
-# "K-factor" ~0.08-0.10 is typical for urban roads. ASSUMPTION.
+# Peak-hour factor: share of daily (AADT) traffic in the modeled peak hour.
+# Used only when PEAK_FACTOR_SOURCE = "guess" (and as the fallback for a gateway missing from
+# peak_factors.csv). GUESS: "K ~0.08-0.10 is typical for urban roads". The measured values are lower
+# (0.065-0.085 at the AM hour, see PEAK_FACTOR_SOURCE).
 K_FACTOR = 0.09
 
 # ---------------------------------------------------------------------------
@@ -113,9 +115,24 @@ MIN_WIN_RATE = 0.80           # must beat the incumbent in >= 80% of scenarios
 # Demand (demand.py)
 # ---------------------------------------------------------------------------
 
-# Share of the peak hour's two-way gateway volume that is inbound in the AM.
-# ASSUMPTION (0.55-0.65 typical); check against SCDOT hourly count stations.
+# Share of the peak hour's two-way gateway volume that is inbound in the AM. GUESS (0.55-0.65 typical),
+# used only when PEAK_FACTOR_SOURCE = "guess". In the PM the guess is reversed: 1 - AM_INBOUND_SPLIT.
 AM_INBOUND_SPLIT = 0.60
+
+# Which peak hour demand.py builds and calibrate.py compares against: "am" or "pm".
+# AM: inbound gateway trips go to jobs, outbound trips come from residents (LODES home -> work).
+# PM: the same with production and attraction swapped (work -> home), internal trips reversed.
+PEAK = "am"
+# Where K and the inbound split come from:
+#   "ccs"   = data/reference/peak_factors.csv, measured per gateway and peak from SCDOT continuous-count
+#             stations (scripts/11_peak_factors.py; Tue-Thu, Sep-Oct 2025). Gateways without a station
+#             (meeting_n, jic, king_ext) and the interior count stations take the stations' AADT-weighted
+#             mean: an ASSUMPTION, labeled in the file.
+#   "guess" = K_FACTOR and AM_INBOUND_SPLIT above (the model before 2026-11-12).
+PEAK_FACTOR_SOURCE = "ccs"
+# Clock-hour windows (inclusive) searched for each peak's hour. The hour is the one with the highest summed
+# weekday volume over all stations (one hour for the whole network). ASSUMPTION: windows by convention.
+PEAK_WINDOWS = {"am": (6, 10), "pm": (14, 19)}
 
 # Share of each freeway gateway's inbound volume that passes through to
 # another gateway without entering the street grid. ASSUMPTION, no source yet.
@@ -172,10 +189,29 @@ HEALTH_JOB_WEIGHT = 1.0
 # Non-work activity added to a zone's weight as a trip end, for gateway trips in both directions:
 #   weight += NONWORK_RETAIL_FOOD_WEIGHT x (retail + accommodation/food jobs, LODES CNS07 + CNS18)
 #           + NONWORK_RESIDENT_WEIGHT x (resident workers, a stand-in for population).
-# 0 = commute-only weights. Calibration knobs (scripts/07_tune.py --grid nonwork), no source.
+# 0 = commute-only weights. FITTED 2026-11-12 (Task 2, scripts/12_fit_demand.py, plan in docs/task2_fit_plan.md):
+# one grid pass on screenline totals of the calibrate-half stations, AM + PM. Grid minimum R = 0, P = 1.0
+# (P = 1.0 is the top of the grid, so the best P may be higher; not refined, by plan). Held-out loss 1.18 -> 0.55.
+# No independent source: these are fitted values, not measurements.
 NONWORK_RETAIL_FOOD_WEIGHT = 0.0
-NONWORK_RESIDENT_WEIGHT = 0.0
+NONWORK_RESIDENT_WEIGHT = 1.0
+# Peninsula-internal NON-WORK vehicle trips in the peak hour (both ends on the peninsula, not in LODES:
+# errands, school runs, shopping, visits, deliveries). Produced at homes (resident workers, the LODES stand-in
+# for population) and attracted by each zone's non-work weight above
+#     A = NONWORK_RETAIL_FOOD_WEIGHT x retail/food jobs + NONWORK_RESIDENT_WEIGHT x resident workers,
+# by gravity on free-flow minutes (GRAVITY_BETA); home -> activity in the AM, reversed in the PM. The same
+# volume in both peaks (ASSUMPTION; PM non-work is usually higher). The overall scale of Task 2's
+# three-parameter fit (with the two weights above); 0 = off. Scenarios vary it with SCENARIO_INTERNAL_RANGE.
+# FITTED 2026-11-12 (same fit as above): 4,500 vph, an interior point of the grid {0, 1000, ..., 6000}.
+# Sanity check, not a source: ~0.1-0.15 peak-hour vehicle trips per peninsula resident would give 3,500-5,000.
+NONWORK_INTERNAL_VPH = 4500.0
 SCENARIO_INTERNAL_RANGE = (0.5, 1.5)   # multiplier on internal demand, per scenario
+
+# Demand-level sensitivity (Task 2 stop rule, used by Task 3). DEMAND_SCALE multiplies the WHOLE OD matrix,
+# gateway trips included, so at anything but 1.0 the gateways no longer match their counts: it is a stress test
+# of how results depend on congestion, not a calibrated state. Report every Task 3 result at each level.
+DEMAND_SCALE = 1.0
+SENSITIVITY_DEMAND_LEVELS = (1.0, 1.3, 1.6)
 
 # Gravity model deterrence f(c) = exp(-beta * c), c = free-flow minutes.
 GRAVITY_BETA = 0.10

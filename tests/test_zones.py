@@ -17,6 +17,15 @@ from chstraffic.graph import build_digraph  # noqa: E402
 TRACT = "45019999900"
 
 
+@pytest.fixture(autouse=True)
+def neutral_nonwork(monkeypatch):
+    """Tests start from commute-only demand; the ones about non-work demand switch it on themselves."""
+    monkeypatch.setattr(config, "NONWORK_RETAIL_FOOD_WEIGHT", 0.0)
+    monkeypatch.setattr(config, "NONWORK_RESIDENT_WEIGHT", 0.0)
+    monkeypatch.setattr(config, "NONWORK_INTERNAL_VPH", 0.0)
+    monkeypatch.setattr(config, "DEMAND_SCALE", 1.0)
+
+
 @pytest.fixture()
 def toy_lodes(tmp_path, monkeypatch):
     """24 blocks over the toy grid, written in LODES file layout."""
@@ -63,10 +72,10 @@ def test_build_conserves_activity_and_connector_shares(toy_lodes):
     assert internal.commuters.sum() == zones.jobs_internal.sum() == zones.workers_internal.sum()
 
 
-def _lodes_zones(D, path, tmp_path, monkeypatch):
+def _lodes_zones(D, path, tmp_path, monkeypatch, peak="am"):
     zones, con, internal, _ = lodes.build(D, path, year=2024, k=6)
     ref = tmp_path / "ref"
-    ref.mkdir()
+    ref.mkdir(exist_ok=True)
     zones.to_csv(ref / "zones_lodes.csv", index=False)
     con.to_csv(ref / "zone_connectors.csv", index=False)
     internal.to_csv(ref / "internal_od.csv", index=False)
@@ -76,7 +85,9 @@ def _lodes_zones(D, path, tmp_path, monkeypatch):
         "freeway_out,gateway_out,fw,32.79,-79.956,Freeway,,,,\n"
         "south,gateway_in,s,32.78,-79.95,Avenue 0,10000,2,,\n")
     monkeypatch.setattr(config, "ZONE_SOURCE", "lodes")
-    return demand.load_zones(D, ref / "zones.csv")
+    if not (ref / "peak_factors.csv").exists():
+        monkeypatch.setattr(config, "PEAK_FACTOR_SOURCE", "guess")   # toy gateways have no measured factors
+    return demand.load_zones(D, ref / "zones.csv", peak=peak)
 
 
 def test_lodes_od_keeps_gateway_totals_and_internal_total(toy_lodes, tmp_path, monkeypatch):
@@ -180,3 +191,121 @@ def test_screenline_sums_parallel_streets_and_applies_tolerance():
     sl = calibrate.screenline_table(df, lines).set_index("screenline")
     assert sl.model["X"] == 1800 and sl.deviation["X"] == 0 and bool(sl.passes["X"])
     assert sl.deviation["Y"] == -0.5 and not bool(sl.passes["Y"]) and bool(sl.passes_section["Y"])
+
+
+# --- Task 2: PM peak, measured peak factors, internal non-work demand -------------------------------
+
+FACTORS = ("gateway,peak,hour,k,inbound_split\n"
+           "freeway,am,8,0.08,0.55\nfreeway,pm,17,0.07,0.45\n"
+           "south,am,8,0.10,0.70\nsouth,pm,17,0.06,0.35\n"
+           "_interior,am,8,0.09,0.5\n_interior,pm,17,0.09,0.5\n")
+AADT = {"freeway": 30000, "south": 10000}
+
+
+def _gateway_sums(z, od):
+    """(inbound total, outbound total) per gateway, read off the OD matrix."""
+    out = {}
+    for g, (node, _) in z.gateways.items():
+        exit_node = z.outbound[g][0]
+        out[g] = (sum(q for (o, _), q in od.items() if o == node), sum(q for (_, d), q in od.items() if d == exit_node))
+    return out
+
+
+@pytest.mark.parametrize("peak", ["am", "pm"])
+@pytest.mark.parametrize("source", ["ccs", "guess"])
+def test_gateway_in_out_totals_exact_in_both_peaks(toy_lodes, tmp_path, monkeypatch, peak, source):
+    D, path, _, _ = toy_lodes
+    (tmp_path / "ref").mkdir()
+    (tmp_path / "ref" / "peak_factors.csv").write_text(FACTORS)
+    monkeypatch.setattr(config, "PEAK_FACTOR_SOURCE", source)
+    monkeypatch.setattr(config, "NONWORK_RESIDENT_WEIGHT", 1.0)
+    monkeypatch.setattr(config, "NONWORK_INTERNAL_VPH", 500.0)      # internal non-work must not touch the gateways
+    z = _lodes_zones(D, path, tmp_path, monkeypatch, peak=peak)
+    od = demand.build_od(D, z, through_share={"south": {"freeway_out": 0.3}})
+    table = {(r.split(",")[0], r.split(",")[1]): tuple(map(float, r.split(",")[3:])) for r in FACTORS.split()[1:]}
+    for g, (vin, vout) in _gateway_sums(z, od).items():
+        if source == "ccs":
+            k, split = table[(g, peak)]
+        else:
+            k, split = config.K_FACTOR, config.AM_INBOUND_SPLIT if peak == "am" else 1 - config.AM_INBOUND_SPLIT
+        assert vin == pytest.approx(AADT[g] * k * split)
+        assert vout == pytest.approx(AADT[g] * k * (1 - split))
+        assert vin + vout == pytest.approx(AADT[g] * k)
+
+
+def test_pm_swaps_production_and_attraction_and_reverses_internal(toy_lodes, tmp_path, monkeypatch):
+    D, path, _, _ = toy_lodes
+    am = _lodes_zones(D, path, tmp_path, monkeypatch, peak="am")
+    pm = demand.load_zones(D, tmp_path / "ref" / "zones.csv", peak="pm")
+    assert am.peak == "am" and pm.peak == "pm"
+    for key in am.dests:
+        assert pm.dests[key][1] == pytest.approx(am.origins[key][1])     # PM inbound goes home
+        assert pm.origins[key][1] == pytest.approx(am.dests[key][1])     # PM outbound leaves from jobs
+    assert pm.internal == {(d, o): q for (o, d), q in am.internal.items()}
+    assert demand.peak_factor("x", "pm")[1] == pytest.approx(1 - config.AM_INBOUND_SPLIT)   # guess mode
+    with pytest.raises(ValueError):
+        demand.peak_factor("x", "noon")
+
+
+def test_internal_nonwork_volume_direction_and_guard(toy_lodes, tmp_path, monkeypatch):
+    D, path, _, _ = toy_lodes
+    off = _lodes_zones(D, path, tmp_path, monkeypatch)
+    od_off = demand.build_od(D, off, through_share={})
+    monkeypatch.setattr(config, "NONWORK_RETAIL_FOOD_WEIGHT", 0.0)
+    monkeypatch.setattr(config, "NONWORK_RESIDENT_WEIGHT", 0.0)
+    monkeypatch.setattr(config, "NONWORK_INTERNAL_VPH", 400.0)
+    with pytest.raises(ValueError):                                  # volume with no activity to attract it
+        demand.load_zones(D, tmp_path / "ref" / "zones.csv")
+    monkeypatch.setattr(config, "NONWORK_RESIDENT_WEIGHT", 1.0)
+    am = demand.load_zones(D, tmp_path / "ref" / "zones.csv", peak="am")
+    pm = demand.load_zones(D, tmp_path / "ref" / "zones.csv", peak="pm")
+    assert sum(am.nonwork.values()) == pytest.approx(1.0)
+    assert all(o != d for o, d in am.nonwork)
+    assert pm.nonwork == pytest.approx({(d, o): q for (o, d), q in am.nonwork.items()})
+    # the added volume is at most 400 vph (less pairs whose two connectors share a node), and it does not
+    # touch the gateway trips (test_gateway_in_out_totals_exact_in_both_peaks)
+    od_am = demand.build_od(D, am, through_share={})
+    monkeypatch.setattr(config, "NONWORK_INTERNAL_VPH", 0.0)
+    od_none = demand.build_od(D, demand.load_zones(D, tmp_path / "ref" / "zones.csv", peak="am"), through_share={})
+    added = sum(od_am.values()) - sum(od_none.values())
+    assert 0.8 * 400 <= added <= 400 + 1e-6
+    assert sum(od_none.values()) == pytest.approx(sum(od_off.values()))
+    # scenarios scale all internal demand (commute + non-work) linearly with the internal factor
+    monkeypatch.setattr(config, "NONWORK_INTERNAL_VPH", 400.0)
+    tot = {f: sum(demand.build_od(D, am, through_share={}, internal_scale=f).values()) for f in (0.0, 1.0, 2.0)}
+    assert tot[2.0] - tot[1.0] == pytest.approx(tot[1.0] - tot[0.0])
+    assert tot[1.0] - tot[0.0] > added
+
+
+def test_peak_factors_pick_one_network_hour_and_sum_station_groups(tmp_path):
+    from chstraffic import peaks
+    rows = []
+    for st, d1name, inbound_share, scale in (("0001", "N", 0.6, 1.0), ("0002", "N", 0.4, 1.0), ("0003", "E", 0.7, 2.0)):
+        for day in ("2025-09-02", "2025-09-03", "2025-09-04"):
+            for h in range(24):
+                tot = scale * (1000 if h == 8 else 3000 if h == 17 else 2000 if h == 7 else 100)
+                d1 = tot * (inbound_share if h < 12 else 1 - inbound_share)
+                rows.append((st, day, h, tot, d1, tot - d1, d1name, "S" if d1name == "N" else "W"))
+    rows.append(("0001", "2025-09-09", 8, 50, "-", "-", "N", "S"))       # an incomplete day is dropped
+    pd.DataFrame(rows, columns=["station", "date", "hour", "all", "dir1", "dir2", "dir1_name", "dir2_name"]).to_csv(
+        tmp_path / "h.csv", index=False)
+    (tmp_path / "s.csv").write_text("station,group,aadt,inbound_dir,represents\n"
+                                    "0001,a,40000,N,ga\n0002,a,,N,ga\n0003,b,50000,E,gb\n")
+    f = peaks.factors(tmp_path / "h.csv", tmp_path / "s.csv", ["ga", "gb", "gc"]).set_index(["gateway", "peak"])
+    assert f.loc[("ga", "am"), "hour"] == 7 and f.loc[("ga", "pm"), "hour"] == 17
+    assert f.loc[("ga", "am"), "k"] == pytest.approx(4000 / 40000)            # group a = stations 1 + 2 summed
+    assert f.loc[("ga", "am"), "inbound_split"] == pytest.approx(0.5)         # (0.6 + 0.4) / 2
+    assert f.loc[("gb", "pm"), "inbound_split"] == pytest.approx(0.3)
+    assert f.loc[("gb", "am"), "n_days"] == 3
+    mean_k = (0.1 * 40000 + 4000 / 50000 * 50000) / 90000
+    assert f.loc[("gc", "am"), "k"] == pytest.approx(mean_k, abs=1e-4)        # no station: AADT-weighted mean
+    assert f.loc[("_interior", "am"), "k"] == pytest.approx(mean_k, abs=1e-4)
+
+
+def test_demand_scale_multiplies_everything(toy_lodes, tmp_path, monkeypatch):
+    D, path, _, _ = toy_lodes
+    z = _lodes_zones(D, path, tmp_path, monkeypatch)
+    base = demand.build_od(D, z, through_share={"south": {"freeway_out": 0.3}})
+    monkeypatch.setattr(config, "DEMAND_SCALE", 1.3)
+    scaled = demand.build_od(D, z, through_share={"south": {"freeway_out": 0.3}})
+    assert scaled == pytest.approx({k: 1.3 * q for k, q in base.items()})

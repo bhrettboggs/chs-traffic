@@ -27,7 +27,7 @@ import pandas as pd
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from chstraffic import config, demand, feasibility, widths  # noqa: E402
-from chstraffic.calibrate import locate  # noqa: E402
+from chstraffic.calibrate import count_k, locate  # noqa: E402
 from chstraffic.fast_assignment import Network, user_equilibrium  # noqa: E402
 
 BEFORE = {"Spring Street": "west", "Cannon Street": "east"}
@@ -101,7 +101,7 @@ def main() -> None:
     rows = []
     for key, (_, _, _, aadt, station) in STATIONS.items():
         fb, fa = street_flow(Bf, sb, key), street_flow(A, sa, key)
-        rows.append(dict(street=key, station=station, count_2025_peak=round(aadt * config.K_FACTOR),
+        rows.append(dict(street=key, station=station, count_2025_peak=round(aadt * count_k()),
                          model_before=round(float(np.median(fb))), model_after=round(float(np.median(fa))),
                          model_change=f"{np.median(fa) / max(np.median(fb), 1) - 1:+.0%}"))
     out = pd.DataFrame(rows)

@@ -41,7 +41,10 @@ def main() -> None:
     ap.add_argument("--shortlist", type=int, default=0,
                     help="from round 2 on, re-screen only the N best moves of round 1 (a shortcut; 0 = all)")
     ap.add_argument("--reset", action="store_true")
+    ap.add_argument("--demand-scale", type=float, default=config.DEMAND_SCALE,
+                    help="multiply all demand (config.SENSITIVITY_DEMAND_LEVELS); not a calibrated state")
     args = ap.parse_args()
+    config.DEMAND_SCALE = args.demand_scale
     t0 = time.time()
     left = lambda: args.time_budget - (time.time() - t0)  # noqa: E731
 
@@ -58,11 +61,14 @@ def main() -> None:
     od_pairs = sorted({k for od in ods for k in od}, key=str)
 
     (ROOT / "outputs").mkdir(exist_ok=True)
-    st = dict(accepted=[], round=1, screen={}, confirm={}, done=False, n_scenarios=args.scenarios)
+    st = dict(accepted=[], round=1, screen={}, confirm={}, done=False, n_scenarios=args.scenarios,
+              demand_scale=config.DEMAND_SCALE, peak=config.PEAK)
     if STATE.exists() and not args.reset:
         st = json.loads(STATE.read_text())
         if st["n_scenarios"] != args.scenarios:
             sys.exit("state file was made with a different --scenarios; use --reset")
+        if st.get("demand_scale", 1.0) != config.DEMAND_SCALE or st.get("peak", "am") != config.PEAK:
+            sys.exit("state file was made at another demand scale or peak; use --reset (or keep a copy per level)")
     save = lambda: STATE.write_text(json.dumps(st, indent=1))  # noqa: E731
 
     def cfg_after(moves):

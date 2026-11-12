@@ -15,7 +15,10 @@ Charleston has spent 30 years converting peninsula one-way pairs back to two-way
 02_build_graph.py   graphml ──► weighted DiGraph (length, speed, lanes, capacity, one-way flag)
 10_oneway_check.py  OSM one-way directions vs Charleston County street centerlines; fixes go in overrides.csv
 06_build_zones.py   Census LODES jobs and workers by block ──► 90 zones, connectors, internal commutes
-04_calibrate.py     model flows vs 37 SCDOT count stations (GEH); 07_tune.py tries demand knobs on half of them
+11_peak_factors.py  SCDOT hourly continuous counts ──► peak-hour K and inbound split per gateway, AM and PM
+04_calibrate.py     model flows vs 37 SCDOT count stations (GEH, screenlines), AM and/or PM peak
+12_fit_demand.py    one fitting pass of non-work demand on half the stations, the other half held out
+                    (plan written first: docs/task2_fit_plan.md); 07_tune.py is the older GEH grid
 08_backtest_...py   Spring/Cannon before vs after the 2017 two-way conversion (plausibility check)
 09_search.py        greedy search over 46 corridors, two-stage evaluation, resumable
 demand              SCDOT AADT at the gateways + LODES zones ──► peak-hour origin-destination matrix
@@ -35,7 +38,7 @@ python scripts/02_build_graph.py
 ## Data
 * Street network: © OpenStreetMap contributors (ODbL)
 * Jobs, workers and commute flows: U.S. Census Bureau, LEHD Origin-Destination Employment Statistics (LODES 8.5, 2024)
-* Traffic counts: SCDOT 2025 Average Daily Traffic, Charleston County (see `data/raw/README.md`)
+* Traffic counts: SCDOT 2025 Average Daily Traffic, Charleston County, and SCDOT continuous-count stations (hourly, via the SCDOT traffic data site) for peak-hour factors (see `data/raw/README.md`)
 * One-way check and street widths: Charleston County GIS (Streets centerlines; City of Charleston pavement inventory)
 
 ## Status

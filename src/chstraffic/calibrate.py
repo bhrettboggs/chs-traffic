@@ -1,6 +1,7 @@
 """Compare modeled link flows with SCDOT counts (GEH statistic). Used by scripts/04 and 07.
 
-Count side:  AADT x K_FACTOR = peak-hour volume, both directions.
+Count side:  AADT x K = peak-hour volume, both directions; K = the interior factor for the peak
+             (demand.peak_factor("_interior", peak): measured gateway mean, or config.K_FACTOR).
 Model side:  UE flow on the matched segment (both directions), or on every edge of
              a road that crosses a cut line (divided roads).
 GEH = sqrt(2 (M - C)^2 / (M + C)); common practice wants GEH < 5 at ~85% of stations.
@@ -79,9 +80,21 @@ def cut_edges(D, road, cut):
             and (D.nodes[u][key] - val) * (D.nodes[v][key] - val) < 0]
 
 
-def fit_table(B, net, flows, st, counts) -> pd.DataFrame:
+def count_k(peak: str | None = None) -> float:
+    """Peak-hour factor applied to the interior count stations' AADT."""
+    from . import demand
+    return demand.peak_factor("_interior", peak)[0]
+
+
+def congestion(net, results) -> np.ndarray:
+    """Per assignment: total travel time / the same flows' free-flow travel time (1.0 = no delay)."""
+    return np.array([float(r.flow @ r.time) / float(r.flow @ net.t0) for r in results])
+
+
+def fit_table(B, net, flows, st, counts, peak: str | None = None) -> pd.DataFrame:
     """One row per station: count, modeled flow (median and spread over scenarios), ratio, GEH."""
     eidx = {e: k for k, e in enumerate(net.edges)}
+    kc = count_k(peak)
     rows, per_scenario = [], {}
     for r in st.merge(counts[["station", "aadt_2025"]], on="station").itertuples():
         if isinstance(r.cut, str) and r.cut:
@@ -106,7 +119,7 @@ def fit_table(B, net, flows, st, counts) -> pd.DataFrame:
         if isinstance(r.cut, str) and r.cut:
             section = m
         per_scenario[r.station] = (m, section)
-        c = r.aadt_2025 * config.K_FACTOR
+        c = r.aadt_2025 * kc
         rows.append(dict(station=r.station, road=r.road.strip("^$").replace("\\", ""), split=r.split,
                          conf=r.mapping_confidence, aadt=r.aadt_2025, count_peak=round(c),
                          model_median=round(float(np.median(m))),

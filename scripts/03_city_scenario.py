@@ -30,7 +30,10 @@ def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--scenarios", type=int, default=config.N_SCENARIOS)
     ap.add_argument("--graph", type=Path, default=ROOT / "data" / "processed" / "chs_digraph.gpickle")
+    ap.add_argument("--demand-scale", type=float, default=config.DEMAND_SCALE,
+                    help="multiply all demand (config.SENSITIVITY_DEMAND_LEVELS); not a calibrated state")
     args = ap.parse_args()
+    config.DEMAND_SCALE = args.demand_scale
 
     D = pickle.loads(args.graph.read_bytes())
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),

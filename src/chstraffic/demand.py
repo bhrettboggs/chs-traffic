@@ -1,6 +1,7 @@
-"""AM-peak demand: gateway volumes and LODES zones -> origin-destination (OD) matrix.
+"""Peak-hour demand (AM or PM): gateway volumes and LODES zones -> origin-destination (OD) matrix.
 
-* Gateway inbound vph = AADT x K-factor x AM inbound split  (all in config)
+* Gateway inbound vph = AADT x K x inbound split, outbound = AADT x K x (1 - split), per gateway and
+  peak (config.PEAK, config.PEAK_FACTOR_SOURCE: measured in peak_factors.csv, or the old guesses)
 * Part of each freeway gateway's volume is through traffic to another gateway
   (config.THROUGH_SHARE). It is routed explicitly so it loads the freeway links
   but is not spread over the street grid.
@@ -10,6 +11,9 @@
   the same gravity form.
 * Internal trips (zone to zone, both on the peninsula) follow the LODES commute
   pattern, scaled by config.INTERNAL_VEH_PER_COMMUTER.
+* Internal non-work trips (config.NONWORK_INTERNAL_VPH): homes -> non-work activity by gravity.
+* PM peak: the AM structure with production and attraction swapped (inbound trips go home to
+  resident workers, outbound trips leave from jobs; internal trips reversed).
 
 With config.ZONE_SOURCE = "lodes" a zone is a cluster of census blocks that loads
 the network at 2-4 connector nodes (lodes.py). Inbound trips are attracted by
@@ -37,6 +41,24 @@ def gateway_vph(aadt: float, k: float = config.K_FACTOR, split: float = config.A
     return aadt * k * split
 
 
+def peak_factor(gateway: str, peak: str | None = None, ref_dir: Path | str | None = None) -> tuple[float, float]:
+    """(K, inbound split) for one gateway in one peak. gateway "_interior" = interior count stations."""
+    peak = peak or config.PEAK
+    if peak not in ("am", "pm"):
+        raise ValueError(f"peak must be 'am' or 'pm', not {peak!r}")
+    guess = (config.K_FACTOR, config.AM_INBOUND_SPLIT if peak == "am" else 1 - config.AM_INBOUND_SPLIT)
+    if config.PEAK_FACTOR_SOURCE == "guess":
+        return guess
+    if config.PEAK_FACTOR_SOURCE != "ccs":
+        raise ValueError(f"unknown PEAK_FACTOR_SOURCE {config.PEAK_FACTOR_SOURCE!r}")
+    from . import peaks
+    ref_dir = Path(ref_dir) if ref_dir else Path(__file__).resolve().parents[2] / "data" / "reference"
+    table = peaks.load_factors(ref_dir / "peak_factors.csv")
+    if (gateway, peak) not in table:
+        raise KeyError(f"no peak factor for {gateway!r} {peak}; rerun scripts/11_peak_factors.py")
+    return table[(gateway, peak)]
+
+
 @dataclass
 class Zones:
     gateways: dict      # name -> (node, inbound vph)
@@ -45,11 +67,13 @@ class Zones:
     snap_report: list   # rows describing each snap, for printing
     outbound: dict = None   # gateway name -> (exit node, outbound vph); None = inbound-only model
     # LODES zones only (None for hand-placed zones and the toy grid):
-    origins: dict = None    # name -> (node, AM outbound production weight); None = use dests
+    origins: dict = None    # name -> (node, outbound production weight); None = use dests
     zone_of: dict = None    # dests/origins key -> zone id (one zone has several connector keys)
     connectors: dict = None  # zone id -> [(node, share), ...]
     internal: dict = None   # (origin zone, dest zone) -> LODES commuters, intrazonal dropped
     job_weight: dict = None  # zone id -> peak-hour weight of its jobs (config.HEALTH_JOB_WEIGHT), 1 = no change
+    peak: str = "am"
+    nonwork: dict = None    # (o zone, d zone) -> share of config.NONWORK_INTERNAL_VPH (sums to 1); None = none
 
 
 def _road_nodes(D, road):
@@ -74,8 +98,11 @@ def _nearest(D, nodes, lat, lon, need_out=False, need_in=False):
     return best, best_d
 
 
-def load_zones(D: nx.DiGraph, path: Path | str) -> Zones:
-    """Snap each row of zones.csv to the nearest graph node on a road matching ``snap_road``."""
+def load_zones(D: nx.DiGraph, path: Path | str, peak: str | None = None) -> Zones:
+    """Snap each row of zones.csv to the nearest graph node on a road matching ``snap_road``.
+
+    peak = "am" or "pm" (default config.PEAK) sets K, the inbound split and the trip direction."""
+    peak = peak or config.PEAK
     df = pd.read_csv(path, comment="#")
     gw, sinks, dests, rep, outbound = {}, {}, {}, [], {}
     for r in df.itertuples():
@@ -89,22 +116,25 @@ def load_zones(D: nx.DiGraph, path: Path | str) -> Zones:
             raise ValueError(f"zone {r.zone_id}: no node on road {r.snap_road!r}")
         rep.append(dict(zone=r.zone_id, kind=r.kind, road=r.snap_road, node=node, snap_m=round(dist)))
         if r.kind == "gateway_in":
-            gw[r.zone_id] = (node, gateway_vph(float(r.aadt)))
+            k, split = peak_factor(r.zone_id, peak, Path(path).parent)
+            gw[r.zone_id] = (node, gateway_vph(float(r.aadt), k, split))
             out_name = f"{r.zone_id}_out"
             if out_name in set(df.zone_id):          # freeway: separate sink row
                 exit_node = None
             else:                                    # arterial: leave where it enters
                 exit_node, _ = _nearest(D, cand, r.lat, r.lon, need_in=True)
-            outbound[r.zone_id] = (exit_node, out_name, gateway_vph(float(r.aadt), split=1 - config.AM_INBOUND_SPLIT))
+            outbound[r.zone_id] = (exit_node, out_name, gateway_vph(float(r.aadt), k, 1 - split))
         elif r.kind == "gateway_out":
             sinks[r.zone_id] = node
         else:
             dests[r.zone_id] = (node, float(r.attraction))
     out = {g: ((node if node is not None else sinks[name]), q) for g, (node, name, q) in outbound.items()
            if node is not None or name in sinks}
-    zones = Zones(gw, sinks, dests, rep, out if config.INCLUDE_OUTBOUND else None)
+    zones = Zones(gw, sinks, dests, rep, out if config.INCLUDE_OUTBOUND else None, peak=peak)
     if config.ZONE_SOURCE == "lodes":
         _load_lodes_zones(D, Path(path).parent, zones)
+    elif config.NONWORK_INTERNAL_VPH > 0:
+        raise ValueError("NONWORK_INTERNAL_VPH needs LODES zones (config.ZONE_SOURCE = 'lodes')")
     return zones
 
 
@@ -127,13 +157,39 @@ def _load_lodes_zones(D, ref_dir: Path, zones: Zones) -> None:
     for zone, grp in con.groupby("zone"):
         tot = float(grp.share.sum())             # shares are stored rounded; make them sum to 1
         zones.connectors[zone] = [(int(n), float(s) / tot) for n, s in zip(grp.node, grp.share)]
+        jobs = float(zrow.jobs_external[zone]) * zones.job_weight[zone]   # where commuters from off the peninsula work
+        homes = float(zrow.workers_external[zone])                        # where residents working off it live
+        attract, produce = (jobs, homes) if zones.peak == "am" else (homes, jobs)
         for i, (node, share) in enumerate(zones.connectors[zone]):
             key = f"{zone}#{i}"
             zones.zone_of[key] = zone
             extra = float(nonwork[zone])
-            zones.dests[key] = (node, (float(zrow.jobs_external[zone]) * zones.job_weight[zone] + extra) * share)
-            zones.origins[key] = (node, (float(zrow.workers_external[zone]) + extra) * share)
-    zones.internal = {(o, d): float(q) for o, d, q in internal.itertuples(index=False) if o != d}
+            zones.dests[key] = (node, (attract + extra) * share)
+            zones.origins[key] = (node, (produce + extra) * share)
+    pairs = ((o, d, float(q)) for o, d, q in internal.itertuples(index=False) if o != d)
+    zones.internal = {((o, d) if zones.peak == "am" else (d, o)): q for o, d, q in pairs}
+    if config.NONWORK_INTERNAL_VPH > 0:
+        zones.nonwork = _nonwork_pattern(D, zones, zrow.workers, nonwork)
+
+
+def _nonwork_pattern(D, zones: Zones, homes: pd.Series, activity: pd.Series,
+                     beta: float = config.GRAVITY_BETA) -> dict:
+    """Shares of the internal non-work volume by zone pair: homes x activity x exp(-beta x free-flow minutes),
+    intrazonal pairs dropped, normalized to 1. AM = home -> activity; PM = the reverse."""
+    if float(activity.sum()) <= 0:
+        raise ValueError("NONWORK_INTERNAL_VPH > 0 needs a non-work weight > 0 "
+                         "(NONWORK_RETAIL_FOOD_WEIGHT or NONWORK_RESIDENT_WEIGHT)")
+    rep = {z: max(c, key=lambda x: x[1])[0] for z, c in zones.connectors.items()}   # heaviest connector node
+    w = {}
+    for o, on in rep.items():
+        if homes.get(o, 0) <= 0:
+            continue
+        dist = nx.single_source_dijkstra_path_length(D, on, weight="fftt_s")
+        for d, dn in rep.items():
+            if d != o and activity.get(d, 0) > 0 and dn in dist:
+                w[(o, d)] = float(homes[o]) * float(activity[d]) * math.exp(-beta * dist[dn] / 60.0)
+    tot = sum(w.values())
+    return {((o, d) if zones.peak == "am" else (d, o)): q / tot for (o, d), q in w.items()}
 
 
 def ff_minutes(D, origins, dests) -> dict:
@@ -205,6 +261,10 @@ def build_od(D, zones: Zones, gateway_scale: dict | None = None, attraction_scal
         _add_outbound(D, zones, od, gateway_scale, orig_w, beta, thru, cost_out)
     if zones.internal:
         _add_internal(zones, od, attraction_scale, internal_scale)
+    if zones.nonwork:
+        _spread(zones, od, {k: s * config.NONWORK_INTERNAL_VPH * internal_scale for k, s in zones.nonwork.items()})
+    if config.DEMAND_SCALE != 1.0:                       # demand-level sensitivity: everything, gateways included
+        od = {k: q * config.DEMAND_SCALE for k, q in od.items()}
     return od
 
 
@@ -249,14 +309,20 @@ def internal_vph(zones: Zones, attraction_scale: dict | None = None, internal_sc
     """
     attraction_scale = attraction_scale or {}
     jw = zones.job_weight or {}
-    raw = {k: q * attraction_scale.get(k[1], 1.0) * jw.get(k[1], 1.0) for k, q in zones.internal.items()}
+    work = 1 if zones.peak == "am" else 0        # which end of the pair is the job (PM pairs run work -> home)
+    raw = {k: q * attraction_scale.get(k[1], 1.0) * jw.get(k[work], 1.0) for k, q in zones.internal.items()}
     base, tot = sum(zones.internal.values()), sum(raw.values())
     f = config.INTERNAL_VEH_PER_COMMUTER * internal_scale * (base / tot if tot > 0 else 0.0)
     return {k: q * f for k, q in raw.items()}
 
 
 def _add_internal(zones, od, attraction_scale, internal_scale):
-    for (oz, dz), q in internal_vph(zones, attraction_scale, internal_scale).items():
+    _spread(zones, od, internal_vph(zones, attraction_scale, internal_scale))
+
+
+def _spread(zones, od, zone_pairs):
+    """Add zone-to-zone vph to `od`, split over the connector nodes of both zones."""
+    for (oz, dz), q in zone_pairs.items():
         for on, os_ in zones.connectors[oz]:
             for dn, ds in zones.connectors[dz]:
                 if on != dn:
@@ -274,11 +340,11 @@ def exit_minutes(D, zones: Zones) -> dict:
 
 
 def _add_outbound(D, zones, od, gateway_scale, dest_w, beta, thru, cost=None):
-    """AM outbound: each gateway's (1 - inbound split) share of the peak hour leaves
+    """Outbound: each gateway's (1 - inbound split) share of the peak hour leaves
     through that gateway. Through traffic arriving from other gateways (``thru``,
     already in ``od``) is part of that volume; the rest comes from the zones by
     gravity, weighted by ``dest_w`` (LODES zones: residents working off the
-    peninsula; hand-placed zones: the attraction weight)."""
+    peninsula in the AM, jobs in the PM; hand-placed zones: the attraction weight)."""
     exit_prod: dict = {}
     for g, (exit_node, vph) in zones.outbound.items():
         vph = vph * gateway_scale.get(g, 1.0)
