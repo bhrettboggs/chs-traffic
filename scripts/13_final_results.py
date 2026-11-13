@@ -25,7 +25,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import pickle
 import sys
 import time
 from pathlib import Path
@@ -36,7 +35,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility, robust, widths  # noqa: E402
+from chstraffic import config, demand, feasibility, files, robust, widths  # noqa: E402
 from chstraffic.calibrate import count_k, locate  # noqa: E402
 from chstraffic.fast_assignment import Network  # noqa: E402
 from chstraffic.variants import city_variants, spring_cannon_before  # noqa: E402
@@ -65,7 +64,7 @@ DEMAND_VARIANTS = {
 class Ctx:
     def __init__(self, n: int, workers: int):
         self.n, self.workers = n, workers
-        self.D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+        self.D = files.load_graph()
         self.table = feasibility.segment_table(
             self.D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
             widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))

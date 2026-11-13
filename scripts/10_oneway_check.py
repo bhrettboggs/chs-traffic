@@ -14,14 +14,13 @@ Prints the counts the network QA reports.
 """
 
 import csv
-import pickle
 import sys
 from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import feasibility, oneway_check, widths  # noqa: E402
+from chstraffic import feasibility, files, oneway_check, widths  # noqa: E402
 
 FOCUS = ["Meeting Street", "East Bay Street", "Lockwood Drive", "Hagood Avenue"]
 
@@ -34,7 +33,7 @@ def nid(x):
 
 
 def main() -> None:
-    D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph()
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
                                       widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     rows = oneway_check.compare(D, ROOT / "data" / "raw" / "chs_county_streets_oneway.geojson",

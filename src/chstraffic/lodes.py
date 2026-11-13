@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 from scipy.spatial import cKDTree
 
-from . import config
+from . import config, files
 
 M_PER_DEG = 111_000.0
 
@@ -51,6 +51,9 @@ def eligible_nodes(D: nx.DiGraph) -> list:
 def load_blocks(lodes_dir: Path | str, D: nx.DiGraph, year: int = config.LODES_YEAR) -> pd.DataFrame:
     """Peninsula blocks with jobs, workers and distance to the nearest eligible node."""
     L = Path(lodes_dir)
+    for name in ("sc_xwalk.csv.gz", f"sc_wac_S000_JT00_{year}.csv.gz", f"sc_rac_S000_JT00_{year}.csv.gz",
+                 f"sc_od_main_JT00_{year}.csv.gz", f"sc_od_aux_JT00_{year}.csv.gz"):
+        files.require(L / name, files.LODES_HINT)
     xw = pd.read_csv(L / "sc_xwalk.csv.gz", dtype=str,
                      usecols=["tabblk2020", "trct", "blklatdd", "blklondd"])
     xw = xw[xw.trct.isin(config.PENINSULA_TRACTS)].copy()

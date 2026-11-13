@@ -1,7 +1,15 @@
-osmnx>=2.1
-networkx>=3.3
-pandas>=2.2
-geopandas>=1.0
-matplotlib>=3.8
-scipy>=1.12
-pytest>=8
+# Versions the tests and the offline pipeline passed with on a fresh clone (Python 3.11, 2026-11-13).
+# Direct dependencies
+osmnx==2.1.1
+networkx==3.6.1
+pandas==3.1.1
+geopandas==1.2.0
+matplotlib==3.11.2
+scipy==1.17.1
+numpy==2.4.6
+shapely==2.2.0
+pyproj==3.7.2
+requests==2.34.2
+pytest==9.2.0
+# Pulled in by geopandas/osmnx; pinned so a fresh install matches
+pyogrio==0.13.0

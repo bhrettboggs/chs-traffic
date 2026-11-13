@@ -17,7 +17,6 @@ Writes outputs/backtest_spring_cannon.csv.
 """
 
 import argparse
-import pickle
 import sys
 from pathlib import Path
 
@@ -26,7 +25,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility, widths  # noqa: E402
+from chstraffic import config, demand, feasibility, files, widths  # noqa: E402
 from chstraffic.calibrate import count_k, locate  # noqa: E402
 from chstraffic.fast_assignment import Network, user_equilibrium  # noqa: E402
 from chstraffic.variants import spring_cannon_before  # noqa: E402
@@ -62,7 +61,7 @@ def main() -> None:
     args = ap.parse_args()
     config.ONEWAY_CAPACITY_BONUS = args.bonus
 
-    D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph()
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
                                       widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     after_cfg = feasibility.baseline_config(table)

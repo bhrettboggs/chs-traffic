@@ -10,7 +10,6 @@ GEH = sqrt(2 (M - C)^2 / (M + C)); common practice wants GEH < 5 at ~85% of stat
 from __future__ import annotations
 
 import math
-import pickle
 import re
 from pathlib import Path
 
@@ -18,12 +17,12 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-from . import config, demand, feasibility, widths
+from . import config, demand, feasibility, files, widths
 
 
 def baseline_graph(root: Path) -> nx.DiGraph:
     """Today's network with overrides applied (what every script calls the baseline)."""
-    D = pickle.loads((root / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph(root / "data" / "processed" / "chs_digraph.gpickle")
     table = feasibility.segment_table(D, feasibility.load_overrides(root / "data" / "reference" / "overrides.csv"),
                                       widths.load(root / "data" / "processed" / "segment_widths.csv"))
     return feasibility.apply_config(D, table, feasibility.baseline_config(table))

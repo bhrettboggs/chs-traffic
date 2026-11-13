@@ -49,14 +49,14 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility, robust, sumo  # noqa: E402
+from chstraffic import config, demand, feasibility, files, robust, sumo  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location("sumo_check", ROOT / "scripts" / "14_sumo_check.py")
 chk = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(chk)
 
 WORK = ROOT / "outputs" / "sumo" / "4b"
-# raw SUMO output per run (tripinfo ~15 MB) goes outside the repo (OneDrive) and is deleted after each run
+# raw SUMO output per run (tripinfo ~15 MB) goes to the system temp folder, not the repo, and is deleted after each run
 RAW = Path(os.environ.get("CHS_SUMO_TMP", tempfile.gettempdir())) / "chs_traffic_4b_runs"
 NETS = ROOT / "outputs" / "sumo" / "nets"
 FINAL = ROOT / "outputs" / "final" / "sumo"
@@ -91,7 +91,8 @@ _cache: dict = {}
 
 def nets() -> dict:
     if "nets" not in _cache:
-        _cache["nets"] = {n: pickle.loads((NETS / f"{chk.slug(n)}.map.pkl").read_bytes())[0] for n in NET_NAMES}
+        _cache["nets"] = {n: pickle.loads(files.require(NETS / f"{chk.slug(n)}.map.pkl", files.NETS_HINT)
+                                          .read_bytes())[0] for n in NET_NAMES}
     return _cache["nets"]
 
 
@@ -99,7 +100,7 @@ def od_shared() -> dict:
     """Base AM OD without pairs whose ends share a junction in any network (they can't be the same trip
     everywhere)."""
     if "od" not in _cache:
-        od = pickle.loads((ROOT / "outputs" / "sumo" / f"od_{PEAK}.pkl").read_bytes())
+        od = pickle.loads(files.require(ROOT / "outputs" / "sumo" / f"od_{PEAK}.pkl", files.NETS_HINT).read_bytes())
         ns = nets().values()
         _cache["od"] = {k: q for k, q in od.items()
                         if all(k[0] in n.junction_of and k[1] in n.junction_of
@@ -126,14 +127,14 @@ def write_net_trips(path: Path, name: str, seed: int, scale: float) -> dict:
     return sumo.write_trips(path, od_shared(), nets()[name], seed=seed, scale=scale)
 
 
-def check_same_trips(files: dict) -> dict:
+def check_same_trips(trip_files: dict) -> dict:
     """Same trip ids, departure times and OSM endpoints in every network's file. Junction names may differ
     only where a network joined OSM nodes into another junction."""
     ns = nets()
-    ref = read_trips(files[BASE])
+    ref = read_trips(trip_files[BASE])
     inv_base = {j: n for n, j in ns[BASE].junction_of.items()}          # today's junctions are single nodes
     renamed = 0
-    for name, p in files.items():
+    for name, p in trip_files.items():
         tr = read_trips(p)
         if len(tr) != len(ref):
             raise RuntimeError(f"{name}: {len(tr)} trips vs {len(ref)} for today")
@@ -161,18 +162,18 @@ def make_trips(seed: int, scale: float, keep: bool = False) -> dict:
     if man.exists():
         return json.loads(man.read_text())
     d.mkdir(parents=True, exist_ok=True)
-    files, info = {}, None
+    trip_files, info = {}, None
     for name in NET_NAMES:
-        files[name] = d / f"{chk.slug(name)}.xml"
-        i = write_net_trips(files[name], name, seed, scale)
+        trip_files[name] = d / f"{chk.slug(name)}.xml"
+        i = write_net_trips(trip_files[name], name, seed, scale)
         if info is not None and i != info:
             raise RuntimeError(f"seed {seed}: {name} drew {i}, today {info}")
         info = i
-    chkd = check_same_trips(files)
+    chkd = check_same_trips(trip_files)
     m = dict(seed=seed, scale=scale, **info, **chkd,
-             sha={chk.slug(n): sha256(p) for n, p in files.items()}, checked_utc=_now())
+             sha={chk.slug(n): sha256(p) for n, p in trip_files.items()}, checked_utc=_now())
     if not keep:
-        for p in files.values():
+        for p in trip_files.values():
             p.unlink()
     man.write_text(json.dumps(m, indent=1))
     return m
@@ -412,6 +413,9 @@ def pct(x, nd=2):
 
 
 def part_report(args) -> None:
+    files.require(WORK / "runs.csv", "the per-run rows of Task 4b are not in git; the frozen results are in "
+                  "outputs/final/sumo/ (seeds40*.csv, RESULTS_4b.md). Rebuild them with `16_sumo_seeds.py level` and "
+                  "`16_sumo_seeds.py main` (200 runs, about 4.2 h with 15 workers on an 8-core laptop)")
     scale = chosen_scale()
     df = load(WORK / "runs.csv")
     df = df[df.kind == "main"].copy()

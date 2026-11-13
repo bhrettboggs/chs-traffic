@@ -13,7 +13,6 @@ UNCALIBRATED until HANDOFF step D. Do not quote these numbers yet.
 """
 
 import argparse
-import pickle
 import sys
 from pathlib import Path
 
@@ -21,7 +20,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility, widths, robust  # noqa: E402
+from chstraffic import config, demand, feasibility, files, robust, widths  # noqa: E402
 from chstraffic.variants import city_variants  # noqa: E402
 
 
@@ -34,7 +33,7 @@ def main() -> None:
     args = ap.parse_args()
     config.DEMAND_SCALE = args.demand_scale
 
-    D = pickle.loads(args.graph.read_bytes())
+    D = files.load_graph(args.graph)
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
                                         widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     base_cfg = feasibility.baseline_config(table)

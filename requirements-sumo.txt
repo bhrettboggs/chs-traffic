@@ -1,3 +1,4 @@
-# Only for scripts/14_sumo_check.py (about 274 MB on Windows: eclipse-sumo + sumo-data wheels)
+# Only for scripts/14_sumo_check.py and scripts/16_sumo_seeds.py (about 274 MB on Windows: eclipse-sumo + sumo-data wheels)
 #   py -3.11 -m pip install --user -r requirements-sumo.txt
 eclipse-sumo==1.28.0
+sumo-data==1.28.0

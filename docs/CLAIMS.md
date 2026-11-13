@@ -68,7 +68,7 @@ changes are rounded from the file's full-precision values.
 | 7 | Nothing published as of 2026-11-13; meeting 2025-09-04; parking 57 / 129 / 115 | City project page and meeting boards (links in README section 7) | checked 2026-11-13 |
 | Reproduce | 1.5-3 hours | `scripts/run_final.cmd` | header comment |
 | Reproduce | LODES 17.5 MB | `data/raw/README.md` | LODES row |
-| Reproduce | SUMO runs about 4 hours on an 8-core laptop | `outputs/final/sumo/seeds40.csv` | started_utc + seconds of the 200 runs: 2026-11-12 22:27 UTC to 2026-11-13 02:39 UTC (platform win32) |
+| Reproduce | 40-seed SUMO study: 4.2 h with 15 workers on an 8-core laptop; 5-seed check: about 4 h of runs in total | `outputs/final/sumo/seeds40.csv` | started_utc + seconds of the 200 runs: 2026-11-12 22:27 UTC to 2026-11-13 02:39 UTC (platform win32); 5-seed check: sum of `seconds` over the 67 rows of `outputs/final/sumo/sumo_runs.csv` = 3.9 h |
 
 **Note 1 (⚠).** The two "without gridlock seeds" numbers are the secondary analysis exactly as
 `seeds40_summary.csv` reports it. The pre-registered plan (`docs/task4b_plan.md`, "Reliability") says to drop

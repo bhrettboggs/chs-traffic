@@ -5,7 +5,6 @@
 Draws today's network as the model sees it: OSM directions with data/reference/overrides.csv
 applied (segments whose direction comes from an override are drawn in green).
 """
-import pickle
 import sys
 from pathlib import Path
 
@@ -16,13 +15,13 @@ from matplotlib.lines import Line2D
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import feasibility  # noqa: E402
+from chstraffic import feasibility, files  # noqa: E402
 
 FREEWAY = {"motorway", "motorway_link", "trunk", "trunk_link"}
 
 
 def main() -> None:
-    D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph()
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"))
     fig, ax = plt.subplots(figsize=(9, 11))
     styles = {"freeway": ("#b0b0b0", 2.2), "two-way": ("#2b6cb0", 1.1), "one-way": ("#d9480f", 1.4),

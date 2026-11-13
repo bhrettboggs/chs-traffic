@@ -21,7 +21,6 @@ UNCALIBRATED model (4 of 6 screenlines pass): results are relative comparisons.
 
 import argparse
 import json
-import pickle
 import sys
 import time
 from pathlib import Path
@@ -31,7 +30,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, demand, feasibility, robust, widths  # noqa: E402
+from chstraffic import config, demand, feasibility, files, robust, widths  # noqa: E402
 
 STATE = ROOT / "outputs" / "search_state.json"
 
@@ -57,7 +56,7 @@ def main() -> None:
     t0 = time.time()
     left = lambda: args.time_budget - (time.time() - t0)  # noqa: E731
 
-    D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph()
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
                                       widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     cors = feasibility.search_corridors(D, table)

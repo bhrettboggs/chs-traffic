@@ -8,17 +8,16 @@ Prints coverage, and how often the width rule agrees with explicit OSM lanes tag
 """
 
 import collections
-import pickle
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import config, widths  # noqa: E402
+from chstraffic import config, files, widths  # noqa: E402
 
 
 def main() -> None:
-    D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph()
     W = widths.join(D, ROOT / "data" / "raw" / "chs_city_pavement_2024.geojson")
     widths.save(W, D, ROOT / "data" / "processed" / "segment_widths.csv")
 

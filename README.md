@@ -173,21 +173,49 @@ which is what SUMO approximates here, not the static model.
 
 ## Reproduce
 
-Windows Command Prompt, Python 3.11:
+Python 3.11. Windows Command Prompt (on Linux/macOS use `python` in a virtual environment and forward slashes):
 
     py -3.11 -m pip install --user -r requirements.txt
-    scripts\run_final.cmd
+    py -3.11 -m pytest
+    py -3.11 scripts\02_build_graph.py
+    py -3.11 scripts\05_join_widths.py
+    py -3.11 scripts\13_final_results.py report
     py -3.11 scripts\15_make_figures.py
 
-`run_final.cmd` rebuilds the graph and every static result in `outputs\final\` (1.5 to 3 hours, resumable);
-`15_make_figures.py` redraws `docs\figures\` from those files in a few seconds. The OSM snapshot from
-2026-11-09 is in `data/raw`; `scripts\01_fetch_osm.py` refetches it (results will then differ slightly).
+That is the offline path, a minute or two in total: 42 tests (about 20 s), the street graph from the
+committed OSM snapshot, the result tables in `outputs\final\` rebuilt from the committed per-scenario
+results in `outputs\final\raw\`, and the figures in `docs\figures\`. On a fresh clone the rebuilt tables
+come out byte for byte the same as the committed ones, and the figures pixel for pixel.
 
-The Census LODES files (17.5 MB) are not in git; `data/raw/README.md` lists the URLs and checksums for
-them and every other input. The zone tables built from them are in `data/reference/`, so `run_final.cmd`
-runs without them. The SUMO results need `py -3.11 -m pip install --user -r requirements-sumo.txt`, then
-`py -3.11 scripts\14_sumo_check.py nets` and `py -3.11 scripts\16_sumo_seeds.py main --workers N` (the 200 runs took about
-4 hours on an 8-core laptop). Tests: `py -3.11 -m pytest`. On Linux/macOS use `python` and forward slashes.
+**Rerunning the static results from scratch** (1.5 to 3 hours, resumable): delete `outputs\final\raw\` and
+the `outputs\final\search_state_*.json` files, then run `scripts\run_final.cmd`. Without the delete it
+finds every unit already done and only rebuilds the report.
+
+**SUMO (optional, slow).** Needs `py -3.11 -m pip install --user -r requirements-sumo.txt` (SUMO 1.28.0,
+about 274 MB):
+
+| Step | What | Run time (measured) |
+|---|---|---|
+| `py -3.11 scripts\14_sumo_check.py nets` | the five SUMO networks and the AM/PM trip tables | about 10 s |
+| `py -3.11 scripts\14_sumo_check.py all --workers N` | 5-seed check (67 runs, AM and PM) | 2 to 7 min per run, about 4 h of runs in total, shared across workers |
+| `py -3.11 scripts\16_sumo_seeds.py level --workers N` | demand-level check (4 runs) | about 10 min |
+| `py -3.11 scripts\16_sumo_seeds.py main --workers N` | the 40-seed study (200 runs) | 4.2 h with 15 workers on an 8-core laptop |
+
+The SUMO runs are deterministic per seed: one run repeated on a fresh Linux install matched the original
+Windows run exactly (same vehicles, teleports and total travel time). The per-run files are not in git;
+the results they produced are in `outputs\final\sumo\`.
+
+**Data not in git.** Everything the steps above need is committed except:
+
+* **Census LODES** (5 files, 17.5 MB), needed only by `scripts\06_build_zones.py`: download them from
+  https://lehd.ces.census.gov/data/lodes/LODES8/sc/ into `data\raw\lodes\` (exact file names and checksums
+  in [`data/raw/README.md`](data/raw/README.md)). The zone tables built from them are in `data\reference\`.
+* **The osmnx download cache** (`cache\`), needed only by `14_sumo_check.py export-osm`; the export
+  itself (`data\raw\chs_peninsula_overpass.osm`) is committed. `scripts\01_fetch_osm.py` refetches OSM
+  from Overpass (needs internet; results will then differ slightly from the 2026-11-09 snapshot).
+* Generated files (`data\processed\`, `outputs\sumo\`), rebuilt by the scripts above.
+
+A script that needs a missing input stops with a message naming the file and how to get it.
 
 Full tables: [`docs/RESULTS.md`](docs/RESULTS.md). Where every number in this README comes from:
 [`docs/CLAIMS.md`](docs/CLAIMS.md).

@@ -45,7 +45,7 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from chstraffic import calibrate, config, demand, feasibility, robust, sumo, widths  # noqa: E402
+from chstraffic import calibrate, config, demand, feasibility, files, robust, sumo, widths  # noqa: E402
 from chstraffic.variants import city_variants  # noqa: E402
 
 OSM = ROOT / "data" / "raw" / "chs_peninsula_overpass.osm"
@@ -68,7 +68,7 @@ def slug(name: str) -> str:
 # ---------------------------------------------------------------------------
 
 def load_model():
-    D = pickle.loads((ROOT / "data" / "processed" / "chs_digraph.gpickle").read_bytes())
+    D = files.load_graph()
     table = feasibility.segment_table(D, feasibility.load_overrides(ROOT / "data" / "reference" / "overrides.csv"),
                                       widths.load(ROOT / "data" / "processed" / "segment_widths.csv"))
     base_cfg = feasibility.baseline_config(table)
@@ -163,6 +163,9 @@ def execute(units: list[dict], workers: int, keep_raw: bool, budget_s: float) ->
     todo = [u for u in units if tuple(str(u[k]) for k in KEY) not in have]
     if not todo:
         return
+    for u in todo:
+        files.require(WORK / "nets" / f"{slug(BASE if u['variant'] == NOISE else u['variant'])}.map.pkl",
+                      files.NETS_HINT)
     D_edges_p = WORK / "edge_list.pkl"
     if not D_edges_p.exists():
         D, table, cfgs = load_model()
@@ -439,7 +442,11 @@ def main() -> None:
     ap.add_argument("--force-nets", action="store_true")
     args = ap.parse_args()
     if args.part == "export-osm":
-        src = sorted((ROOT / "cache").glob("*.json"), key=lambda p: p.stat().st_size)[-1]
+        cached = sorted((ROOT / "cache").glob("*.json"), key=lambda p: p.stat().st_size)
+        if not cached:
+            raise SystemExit("export-osm needs the osmnx cache (cache/, not in git) from scripts/01_fetch_osm.py.\n"
+                             f"  The 2026-11-09 export is already in git: {OSM.relative_to(ROOT)}")
+        src = cached[-1]
         sumo.export_overpass_json(src, OSM)
         print(f"wrote {OSM} from {src.name}")
         return
