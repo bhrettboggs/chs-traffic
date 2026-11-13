@@ -401,3 +401,42 @@ def fill_uncovered(flows: np.ndarray, edge_list: list, G: nx.DiGraph, passes: in
             if vals:
                 f[..., k] = np.mean(vals, axis=0)
     return f, int(np.isnan(f if f.ndim == 1 else f[0]).sum())
+
+
+# ---------------------------------------------------------------------------
+# Per-run details (Task 4b): small arrays kept for every run so a later look at "where" an effect comes
+# from needs no rerun. Raw tripinfo/edgedata stay out of git.
+# ---------------------------------------------------------------------------
+
+TRIP_FIELDS = ("depart", "departDelay", "duration", "timeLoss", "waitingTime", "routeLength")
+EDGE_FIELDS = ("entered", "sampledSeconds", "traveltime", "waitingTime", "timeLoss")
+
+
+def run_details(out_dir: Path) -> dict:
+    """Trip-level arrays from tripinfo (sorted by trip id; `planned` = planned departure, `arrived` = has an
+    arrival) and edge-level arrays from the peak-hour edgeData. Missing attributes are NaN."""
+    ids, rows, arrived = [], [], []
+    for _, el in ET.iterparse(out_dir / "tripinfo.xml"):
+        if el.tag != "tripinfo":
+            continue
+        ids.append(int(el.get("id")))
+        rows.append([float(el.get(f, "nan")) for f in TRIP_FIELDS])
+        arrived.append(float(el.get("arrival", -1)) >= 0)
+        el.clear()
+    order = np.argsort(ids)
+    T = np.array(rows, dtype=float).reshape(-1, len(TRIP_FIELDS))[order]
+    out = {"trip_id": np.array(ids, dtype=np.int64)[order], "arrived": np.array(arrived, dtype=bool)[order]}
+    for k, f in enumerate(TRIP_FIELDS):
+        out["trip_" + f] = T[:, k]
+    out["trip_planned"] = out["trip_depart"] - out["trip_departDelay"]
+    eids, erows = [], []
+    for _, el in ET.iterparse(out_dir / "edgedata.xml"):
+        if el.tag == "edge":
+            eids.append(el.get("id"))
+            erows.append([float(el.get(f, "nan") or "nan") for f in EDGE_FIELDS])
+            el.clear()
+    E = np.array(erows, dtype=float).reshape(-1, len(EDGE_FIELDS))
+    out["edge_id"] = np.array(eids, dtype=str)
+    for k, f in enumerate(EDGE_FIELDS):
+        out["edge_" + f] = E[:, k]
+    return out
