@@ -1,0 +1,7 @@
+screenline,name,streets,aadt,count_peak,model,p10,p90,deviation,model_section,deviation_section,tolerance,passes,passes_section
+A,Upper peninsula (Race St to Mount Pleasant St),4,61900,4778,1974,1782,2130,-0.59,2104,-0.56,0.3,False,False
+B,Line St to Spring St band,6,28550,2204,2601,2334,2801,0.18,2382,0.08,0.41,True,True
+C,Calhoun St to Cannon St band,7,78300,6046,4980,4466,5589,-0.18,4962,-0.18,0.28,True,True
+D,South of Calhoun St,4,10500,811,360,303,395,-0.56,579,-0.29,0.59,True,True
+E,West side (Lockwood Dr to Rutledge Ave),7,126900,9798,8563,7853,8856,-0.13,8578,-0.12,0.25,True,True
+F,Middle (Rutledge Ave to Meeting St),4,39400,3042,2454,2181,2577,-0.19,2268,-0.25,0.35,True,True
